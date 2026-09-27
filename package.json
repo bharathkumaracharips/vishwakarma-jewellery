@@ -1,0 +1,31 @@
+{
+  "name": "vishwakarma-jewelers",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "backend:dev": "cargo run --manifest-path backend/Cargo.toml",
+    "backend:build": "cargo build --release --manifest-path backend/Cargo.toml",
+    "backend:start": "./backend/target/release/backend",
+    "db:view": "mongosh \"mongodb://127.0.0.1:27017/vishwakarma_jewelers\" --quiet --eval 'console.log(\"=== USERS IN LOCAL MONGODB ===\"); printjson(db.users.find().toArray()); console.log(\"\\n=== ORNAMENT INTERACTION AUDIT ===\"); printjson(db.interactions.find().toArray());'",
+    "db:shell": "mongosh \"mongodb://127.0.0.1:27017/vishwakarma_jewelers\""
+  },
+  "dependencies": {
+    "lucide-react": "^1.48.0",
+    "motion": "^13.4.4",
+    "next": "16.3.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.6",
+    "typescript": "^5"
+  }
+}
