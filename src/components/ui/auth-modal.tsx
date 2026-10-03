@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Eye, EyeOff } from 'lucide-react';
 import { CircularImageGallery } from '@/components/ui/carousel-circular-image-gallery';
 import { AIGradientBorder } from '@/components/ui/ai-gradient-border';
@@ -16,6 +17,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [fullName, setFullName] = useState('');
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
 
 	// Close on Escape key
 	useEffect(() => {
@@ -32,7 +38,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 		};
 	}, [isOpen, onClose]);
 
-	if (!isOpen) return null;
+	if (!isOpen || !mounted || typeof window === 'undefined') return null;
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -40,8 +46,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 		onClose();
 	};
 
-	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-10">
+	return createPortal(
+		<div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 md:p-10 overflow-y-auto">
 			{/* Backdrop Overlay */}
 			<div
 				className="fixed inset-0 bg-black/85 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
@@ -49,7 +55,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 			/>
 
 			{/* Modal Container with AI Glowing Animated Gradient Border */}
-			<div className="relative w-full max-w-[960px]">
+			<div className="relative w-full max-w-[960px] my-auto">
 				{/* Dedicated Clean Close Button (Floated outside to never overlap the card/image) */}
 				<button
 					onClick={onClose}
@@ -279,6 +285,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 				</div>
 			</AIGradientBorder>
 			</div>
-		</div>
+		</div>,
+		document.body
 	);
 }

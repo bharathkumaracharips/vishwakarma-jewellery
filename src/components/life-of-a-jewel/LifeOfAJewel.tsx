@@ -240,18 +240,20 @@ export function LifeOfAJewel() {
 
 					{/* ================= CHAPTER 05: HAVE AN IDEA? YOUR IDEOLOGY, OUR CRAFT ================= */}
 					<div
-						className="absolute inset-0 size-full flex items-center justify-center overflow-y-auto py-8"
+						className="absolute inset-0 size-full flex items-center justify-center"
 						style={getChapterTransitionStyle(progress, CHAPTERS[4].range)}
 					>
 						<div className="grid grid-cols-1 lg:grid-cols-12 w-full max-w-5xl items-center gap-6 lg:gap-8 px-4">
 							{/* Left: Photorealistic Visual Inspiration */}
-							<div className="lg:col-span-5 hidden lg:flex flex-col items-center justify-center text-center space-y-4">
-								<JewelleryAsset
-									configuration={configuration}
-									progress={progress}
-									isExploded={false}
-								/>
-								<div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-center backdrop-blur-md">
+							<div className="lg:col-span-5 hidden lg:flex flex-col items-center justify-center text-center space-y-3">
+								<div className="scale-90">
+									<JewelleryAsset
+										configuration={configuration}
+										progress={progress}
+										isExploded={false}
+									/>
+								</div>
+								<div className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-1.5 text-center backdrop-blur-md">
 									<span className="text-[10px] font-mono uppercase tracking-widest text-[#fae19c] block">
 										Ideology Meets Craft
 									</span>
@@ -415,8 +417,8 @@ export function LifeOfAJewel() {
 								</p>
 							</div>
 
-							<div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
-								{DEMO_MILESTONES.map((m) => (
+							<div className="space-y-2 w-full">
+								{DEMO_MILESTONES.slice(1, 4).map((m) => (
 									<EventNode
 										key={m.id}
 										milestone={m}
@@ -424,6 +426,15 @@ export function LifeOfAJewel() {
 										isActive={m.status === 'active'}
 									/>
 								))}
+							</div>
+
+							<div className="flex justify-center pt-1">
+								<button
+									onClick={() => setSelectedMilestone(DEMO_MILESTONES[3])}
+									className="text-[11px] font-mono text-[#fae19c] hover:underline cursor-pointer flex items-center gap-1.5 transition-colors"
+								>
+									<span>View Complete 5-Stage Ledger & Cryptographic Hashes →</span>
+								</button>
 							</div>
 						</div>
 					</div>
