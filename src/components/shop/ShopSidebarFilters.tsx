@@ -67,9 +67,9 @@ export function ShopSidebarFilters({
 	];
 
 	return (
-		<aside className="w-full space-y-7 rounded-2xl border border-white/10 bg-[#0c0d13]/90 p-5 sm:p-6 backdrop-blur-xl">
-			{/* Top Header */}
-			<div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+		<aside className="w-full h-full flex flex-col rounded-2xl border border-white/10 bg-[#0c0d13]/95 backdrop-blur-xl shadow-2xl overflow-hidden">
+			{/* Top Header - Fixed/Pinned */}
+			<div className="flex items-center justify-between border-b border-white/[0.08] px-5 py-4 shrink-0 bg-[#0c0d13]">
 				<div className="flex items-center gap-2 text-xs font-serif font-bold uppercase tracking-[0.2em] text-white">
 					<Filter className="size-3.5 text-[#fae19c]" />
 					<span>Filter Archives</span>
@@ -84,153 +84,156 @@ export function ShopSidebarFilters({
 				</button>
 			</div>
 
-			{/* ---------------- 1. THE 3 MAIN CRAFT PILLARS ---------------- */}
-			<div className="space-y-2.5">
-				<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-[#fae19c]">
-					Atelier Creation Pillar
-				</label>
-				<div className="space-y-1.5">
-					{CRAFT_MODES.map((mode) => {
-						const isActive = selectedCraftMode === mode.id;
-						return (
-							<button
-								key={mode.id}
-								onClick={() => onSelectCraftMode(mode.id)}
-								className={`w-full flex flex-col items-start rounded-xl border p-3 text-left transition-all cursor-pointer ${
-									isActive
-										? 'border-[#fae19c] bg-[#fae19c]/15 shadow-sm'
-										: 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]'
-								}`}
-							>
-								<div className="flex w-full items-center justify-between">
-									<span className={`text-xs font-semibold uppercase tracking-wider ${
-										isActive ? 'text-[#fae19c]' : 'text-white'
-									}`}>
-										{mode.label}
+			{/* Scrollable Filter Options Body */}
+			<div className="flex-1 overflow-y-auto px-5 py-4 space-y-6 scrollbar-thin scrollbar-thumb-white/15 hover:scrollbar-thumb-[#fae19c]/30 scrollbar-track-transparent">
+				{/* ---------------- 1. THE 3 MAIN CRAFT PILLARS ---------------- */}
+				<div className="space-y-2.5">
+					<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-[#fae19c]">
+						Atelier Creation Pillar
+					</label>
+					<div className="space-y-1.5">
+						{CRAFT_MODES.map((mode) => {
+							const isActive = selectedCraftMode === mode.id;
+							return (
+								<button
+									key={mode.id}
+									onClick={() => onSelectCraftMode(mode.id)}
+									className={`w-full flex flex-col items-start rounded-xl border p-3 text-left transition-all cursor-pointer ${
+										isActive
+											? 'border-[#fae19c] bg-[#fae19c]/15 shadow-sm'
+											: 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]'
+									}`}
+								>
+									<div className="flex w-full items-center justify-between">
+										<span className={`text-xs font-semibold uppercase tracking-wider ${
+											isActive ? 'text-[#fae19c]' : 'text-white'
+										}`}>
+											{mode.label}
+										</span>
+										{isActive && (
+											<div className="size-4 rounded-full bg-[#fae19c] text-black flex items-center justify-center">
+												<Check className="size-2.5 stroke-[3]" />
+											</div>
+										)}
+									</div>
+									<span className="text-[10.5px] text-neutral-400 font-light mt-0.5">
+										{mode.description}
 									</span>
-									{isActive && (
-										<div className="size-4 rounded-full bg-[#fae19c] text-black flex items-center justify-center">
-											<Check className="size-2.5 stroke-[3]" />
-										</div>
-									)}
-								</div>
-								<span className="text-[10.5px] text-neutral-400 font-light mt-0.5">
-									{mode.description}
-								</span>
-							</button>
-						);
-					})}
+								</button>
+							);
+						})}
+					</div>
+				</div>
+
+				{/* ---------------- 2. METAL PURITY ---------------- */}
+				<div className="space-y-2 border-t border-white/[0.08] pt-4">
+					<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
+						Metal Purity & Tone
+					</label>
+					<div className="space-y-1">
+						{METALS.map((m) => {
+							const isSelected = selectedMetal === m.id;
+							return (
+								<button
+									key={m.id}
+									onClick={() => onSelectMetal(m.id)}
+									className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs text-left transition-colors cursor-pointer ${
+										isSelected
+											? 'bg-white/15 text-white font-medium'
+											: 'text-neutral-400 hover:text-neutral-200'
+									}`}
+								>
+									<span>{m.label}</span>
+									{isSelected && <span className="size-1.5 rounded-full bg-[#fae19c]" />}
+								</button>
+							);
+						})}
+					</div>
+				</div>
+
+				{/* ---------------- 3. WEIGHT RANGE ---------------- */}
+				<div className="space-y-2 border-t border-white/[0.08] pt-4">
+					<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
+						Gold Weight
+					</label>
+					<div className="space-y-1">
+						{WEIGHT_RANGES.map((w) => {
+							const isSelected = selectedWeightRange === w.id;
+							return (
+								<button
+									key={w.id}
+									onClick={() => onSelectWeightRange(w.id)}
+									className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs text-left transition-colors cursor-pointer ${
+										isSelected
+											? 'bg-white/15 text-white font-medium'
+											: 'text-neutral-400 hover:text-neutral-200'
+									}`}
+								>
+									<span>{w.label}</span>
+									{isSelected && <span className="size-1.5 rounded-full bg-[#fae19c]" />}
+								</button>
+							);
+						})}
+					</div>
+				</div>
+
+				{/* ---------------- 4. GEMSTONES ---------------- */}
+				<div className="space-y-2 border-t border-white/[0.08] pt-4">
+					<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
+						Gemstone Curation
+					</label>
+					<div className="space-y-1">
+						{STONES.map((s) => {
+							const isSelected = selectedStone === s.id;
+							return (
+								<button
+									key={s.id}
+									onClick={() => onSelectStone(s.id)}
+									className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs text-left transition-colors cursor-pointer ${
+										isSelected
+											? 'bg-white/15 text-white font-medium'
+											: 'text-neutral-400 hover:text-neutral-200'
+									}`}
+								>
+									<span>{s.label}</span>
+									{isSelected && <span className="size-1.5 rounded-full bg-[#fae19c]" />}
+								</button>
+							);
+						})}
+					</div>
+				</div>
+
+				{/* ---------------- 5. OCCASION COLLECTIONS ---------------- */}
+				<div className="space-y-2 border-t border-white/[0.08] pt-4">
+					<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
+						Occasion Collection
+					</label>
+					<div className="space-y-1">
+						{COLLECTIONS.map((c) => {
+							const isSelected = selectedCollection === c.id;
+							return (
+								<button
+									key={c.id}
+									onClick={() => onSelectCollection(c.id)}
+									className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs text-left transition-colors cursor-pointer ${
+										isSelected
+											? 'bg-white/15 text-white font-medium'
+											: 'text-neutral-400 hover:text-neutral-200'
+									}`}
+								>
+									<span>{c.label}</span>
+									{isSelected && <span className="size-1.5 rounded-full bg-[#fae19c]" />}
+								</button>
+							);
+						})}
+					</div>
 				</div>
 			</div>
 
-			{/* ---------------- 2. METAL PURITY ---------------- */}
-			<div className="space-y-2 border-t border-white/[0.08] pt-4">
-				<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
-					Metal Purity & Tone
-				</label>
-				<div className="space-y-1">
-					{METALS.map((m) => {
-						const isSelected = selectedMetal === m.id;
-						return (
-							<button
-								key={m.id}
-								onClick={() => onSelectMetal(m.id)}
-								className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs text-left transition-colors cursor-pointer ${
-									isSelected
-										? 'bg-white/15 text-white font-medium'
-										: 'text-neutral-400 hover:text-neutral-200'
-								}`}
-							>
-								<span>{m.label}</span>
-								{isSelected && <span className="size-1.5 rounded-full bg-[#fae19c]" />}
-							</button>
-						);
-					})}
-				</div>
-			</div>
-
-			{/* ---------------- 3. WEIGHT RANGE ---------------- */}
-			<div className="space-y-2 border-t border-white/[0.08] pt-4">
-				<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
-					Gold Weight
-				</label>
-				<div className="space-y-1">
-					{WEIGHT_RANGES.map((w) => {
-						const isSelected = selectedWeightRange === w.id;
-						return (
-							<button
-								key={w.id}
-								onClick={() => onSelectWeightRange(w.id)}
-								className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs text-left transition-colors cursor-pointer ${
-									isSelected
-										? 'bg-white/15 text-white font-medium'
-										: 'text-neutral-400 hover:text-neutral-200'
-								}`}
-							>
-								<span>{w.label}</span>
-								{isSelected && <span className="size-1.5 rounded-full bg-[#fae19c]" />}
-							</button>
-						);
-					})}
-				</div>
-			</div>
-
-			{/* ---------------- 4. GEMSTONES ---------------- */}
-			<div className="space-y-2 border-t border-white/[0.08] pt-4">
-				<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
-					Gemstone Curation
-				</label>
-				<div className="space-y-1">
-					{STONES.map((s) => {
-						const isSelected = selectedStone === s.id;
-						return (
-							<button
-								key={s.id}
-								onClick={() => onSelectStone(s.id)}
-								className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs text-left transition-colors cursor-pointer ${
-									isSelected
-										? 'bg-white/15 text-white font-medium'
-										: 'text-neutral-400 hover:text-neutral-200'
-								}`}
-							>
-								<span>{s.label}</span>
-								{isSelected && <span className="size-1.5 rounded-full bg-[#fae19c]" />}
-							</button>
-						);
-					})}
-				</div>
-			</div>
-
-			{/* ---------------- 5. OCCASION COLLECTIONS ---------------- */}
-			<div className="space-y-2 border-t border-white/[0.08] pt-4">
-				<label className="block text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
-					Occasion Collection
-				</label>
-				<div className="space-y-1">
-					{COLLECTIONS.map((c) => {
-						const isSelected = selectedCollection === c.id;
-						return (
-							<button
-								key={c.id}
-								onClick={() => onSelectCollection(c.id)}
-								className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs text-left transition-colors cursor-pointer ${
-									isSelected
-										? 'bg-white/15 text-white font-medium'
-										: 'text-neutral-400 hover:text-neutral-200'
-								}`}
-							>
-								<span>{c.label}</span>
-								{isSelected && <span className="size-1.5 rounded-full bg-[#fae19c]" />}
-							</button>
-						);
-					})}
-				</div>
-			</div>
-
-			{/* Total matches footer */}
-			<div className="border-t border-white/[0.08] pt-4 text-center">
+			{/* Pinned Footer with Result Count */}
+			<div className="border-t border-white/[0.08] px-5 py-3 text-center shrink-0 bg-[#0c0d13]/90">
 				<span className="text-[11px] font-mono text-neutral-400">
-					Showing <span className="text-[#fae19c] font-bold">{totalResults}</span> Handcrafted Heirlooms
+					Showing <span className="text-[#fae19c] font-bold">{totalResults}</span> Heirlooms
 				</span>
 			</div>
 		</aside>

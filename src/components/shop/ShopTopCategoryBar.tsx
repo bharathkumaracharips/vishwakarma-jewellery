@@ -13,8 +13,8 @@ export function ShopTopCategoryBar({
 	onSelectCategory,
 }: ShopTopCategoryBarProps) {
 	return (
-		<nav className="w-full border-b border-white/[0.08] bg-[#090a0f]/95 backdrop-blur-md sticky top-[84px] z-30 px-4 sm:px-8 lg:px-12">
-			<div className="max-w-7xl mx-auto flex items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto py-3 scrollbar-none">
+		<nav className="w-full border-b border-white/[0.08] bg-[#090a0f]/95 backdrop-blur-md sticky top-[120px] z-30 px-3 sm:px-6 lg:px-8">
+			<div className="max-w-[1720px] mx-auto flex items-center justify-start sm:justify-center gap-2 sm:gap-2.5 overflow-x-auto py-2.5 scrollbar-none">
 				{TOP_CATEGORIES.map((cat) => {
 					const isActive = selectedCategory === cat.id;
 					return (

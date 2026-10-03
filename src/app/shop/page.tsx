@@ -113,15 +113,9 @@ function ShopContent() {
 			{/* Top Navbar */}
 			<Header />
 
-			{/* UPPER MENU: All, Rings, Chains, Necklaces, Bangles, Earrings, Pendants... */}
-			<ShopTopCategoryBar
-				selectedCategory={selectedCategory}
-				onSelectCategory={(catId) => setSelectedCategory(catId)}
-			/>
-
-			{/* Live Bullion & Hallmark Bar */}
-			<div className="w-full border-b border-white/[0.06] bg-[#0c0d12]/95 py-2 px-4 text-[10.5px] font-mono tracking-wider text-neutral-400">
-				<div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+			{/* Live Bullion & Hallmark Bar (Placed ABOVE category, sticky top-[84px] z-40) */}
+			<div className="w-full border-b border-white/[0.06] bg-[#0c0d12]/95 backdrop-blur-md sticky top-[84px] z-40 py-2.5 px-3 sm:px-6 lg:px-8 text-[10.5px] font-mono tracking-wider text-neutral-400 shadow-md">
+				<div className="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-3">
 					<div className="flex items-center gap-4">
 						<span className="flex items-center gap-1.5 text-neutral-300">
 							<span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -148,11 +142,17 @@ function ShopContent() {
 				</div>
 			</div>
 
+			{/* UPPER MENU: All, Rings, Chains, Necklaces, Bangles, Earrings, Pendants... (sticky top-[120px]) */}
+			<ShopTopCategoryBar
+				selectedCategory={selectedCategory}
+				onSelectCategory={(catId) => setSelectedCategory(catId)}
+			/>
+
 			{/* ================= MAIN 2-COLUMN SHOP EXPERIENCE ================= */}
-			<main className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-10">
-				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-					{/* ---------------- LEFT SIDEBAR: 3 MODES + GRANULAR FILTERS ---------------- */}
-					<div className="lg:col-span-3 lg:sticky lg:top-[160px]">
+			<main className="max-w-[1720px] mx-auto px-3 sm:px-6 lg:px-8 py-6">
+				<div className="flex flex-col lg:flex-row gap-6 xl:gap-7 items-start">
+					{/* ---------------- LEFT SIDEBAR: LOCKED POSITION WITH DEDICATED SCROLLER ---------------- */}
+					<div className="w-full lg:w-[280px] xl:w-[310px] shrink-0 lg:sticky lg:top-[178px] lg:h-[calc(100vh-198px)]">
 						<ShopSidebarFilters
 							selectedCraftMode={selectedCraftMode}
 							onSelectCraftMode={(mode) => setSelectedCraftMode(mode)}
@@ -169,8 +169,8 @@ function ShopContent() {
 						/>
 					</div>
 
-					{/* ---------------- RIGHT CONTENT: PRODUCT CATALOGUE GRID ---------------- */}
-					<div className="lg:col-span-9 space-y-6">
+					{/* ---------------- RIGHT CONTENT: PRODUCT CATALOGUE GRID (4 COLUMNS) ---------------- */}
+					<div className="flex-1 min-w-0 space-y-6">
 						{/* Sorting & Filter Header Bar */}
 						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#0c0d13]/80 p-4 backdrop-blur-md">
 							<div className="space-y-0.5">
@@ -200,7 +200,7 @@ function ShopContent() {
 							</div>
 						</div>
 
-						{/* Product Grid */}
+						{/* Product Grid (4 items per row on desktop) */}
 						{filteredItems.length === 0 ? (
 							<div className="rounded-2xl border border-white/10 bg-white/[0.02] p-12 text-center space-y-4">
 								<p className="font-serif text-lg text-white">No ornaments match your active filter combination.</p>
@@ -215,7 +215,7 @@ function ShopContent() {
 								</button>
 							</div>
 						) : (
-							<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4 sm:gap-4.5">
 								{filteredItems.map((item) => (
 									<ShopProductCard
 										key={item.id}
