@@ -362,7 +362,7 @@ export function Header() {
 											Calibrated assay diagnostics & master goldsmith bench repairs
 										</span>
 										<a
-											href="#all-services"
+											href="/services"
 											className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#fae19c] hover:underline"
 										>
 											<span>&rarr; View All Jewellery Services</span>
@@ -676,7 +676,7 @@ export function Header() {
 						</div>
 						<div className="mt-3 border-t border-white/[0.08] pt-2 pl-2">
 							<a
-								href="#all-services"
+								href="/services"
 								onClick={() => setOpen(false)}
 								className="text-xs font-semibold tracking-[0.14em] uppercase text-[#fae19c]"
 							>
@@ -848,46 +848,46 @@ const shopByList = [
 
 // JEWELLERY SERVICES DATA
 const repairServicesList = [
-	{ title: 'Ring Repair', href: '#ring-repair' },
-	{ title: 'Chain Repair', href: '#chain-repair' },
-	{ title: 'Necklace Repair', href: '#necklace-repair' },
-	{ title: 'Bangle Repair', href: '#bangle-repair' },
-	{ title: 'Bracelet Repair', href: '#bracelet-repair' },
-	{ title: 'Earring Repair', href: '#earring-repair' },
-	{ title: 'Other Jewellery Repair', href: '#other-jewellery-repair' },
+	{ title: 'Ring Repair', href: '/services?category=repair&service=ring-repair' },
+	{ title: 'Chain Repair', href: '/services?category=repair&service=chain-repair' },
+	{ title: 'Necklace Repair', href: '/services?category=repair&service=necklace-repair' },
+	{ title: 'Bangle Repair', href: '/services?category=repair&service=bangle-repair' },
+	{ title: 'Bracelet Repair', href: '/services?category=repair&service=bracelet-repair' },
+	{ title: 'Earring Repair', href: '/services?category=repair&service=earring-repair' },
+	{ title: 'Other Jewellery Repair', href: '/services?category=repair&service=other-jewellery-repair' },
 ];
 
 const careRestorationList = [
-	{ title: 'Cleaning', href: '#cleaning' },
-	{ title: 'Polishing', href: '#polishing' },
-	{ title: 'Restoration', href: '#restoration' },
-	{ title: 'Antique Restoration', href: '#antique-restoration' },
-	{ title: 'Jewellery Maintenance', href: '#jewellery-maintenance' },
+	{ title: 'Cleaning', href: '/services?category=care&service=cleaning' },
+	{ title: 'Polishing', href: '/services?category=care&service=polishing' },
+	{ title: 'Restoration', href: '/services?category=care&service=restoration' },
+	{ title: 'Antique Restoration', href: '/services?category=care&service=antique-restoration' },
+	{ title: 'Jewellery Maintenance', href: '/services?category=care&service=jewellery-maintenance' },
 ];
 
 const resizingModificationList = [
-	{ title: 'Ring Resizing', href: '#ring-resizing' },
-	{ title: 'Bangle Size Adjustment', href: '#bangle-size-adjustment' },
-	{ title: 'Chain Length Adjustment', href: '#chain-length-adjustment' },
-	{ title: 'Necklace Length Adjustment', href: '#necklace-length-adjustment' },
-	{ title: 'Design Modification', href: '#design-modification' },
-	{ title: 'Jewellery Conversion', href: '#jewellery-conversion' },
+	{ title: 'Ring Resizing', href: '/services?category=resizing&service=ring-resizing' },
+	{ title: 'Bangle Size Adjustment', href: '/services?category=resizing&service=bangle-size-adjustment' },
+	{ title: 'Chain Length Adjustment', href: '/services?category=resizing&service=chain-length-adjustment' },
+	{ title: 'Necklace Length Adjustment', href: '/services?category=resizing&service=necklace-length-adjustment' },
+	{ title: 'Design Modification', href: '/services?category=resizing&service=design-modification' },
+	{ title: 'Jewellery Conversion', href: '/services?category=resizing&service=jewellery-conversion' },
 ];
 
 const stoneServicesList = [
-	{ title: 'Stone Replacement', href: '#stone-replacement' },
-	{ title: 'Stone Setting', href: '#stone-setting' },
-	{ title: 'Stone Resetting', href: '#stone-resetting' },
-	{ title: 'Loose Stone Repair', href: '#loose-stone-repair' },
-	{ title: 'Missing Stone Replacement', href: '#missing-stone-replacement' },
-	{ title: 'Stone Inspection', href: '#stone-inspection' },
+	{ title: 'Stone Replacement', href: '/services?category=stones&service=stone-replacement' },
+	{ title: 'Stone Setting', href: '/services?category=stones&service=stone-setting' },
+	{ title: 'Stone Resetting', href: '/services?category=stones&service=stone-resetting' },
+	{ title: 'Loose Stone Repair', href: '/services?category=stones&service=loose-stone-repair' },
+	{ title: 'Missing Stone Replacement', href: '/services?category=stones&service=missing-stone-replacement' },
+	{ title: 'Stone Inspection', href: '/services?category=stones&service=stone-inspection' },
 ];
 
 const inspectionServicesList = [
-	{ title: 'Jewellery Inspection', href: '#jewellery-inspection' },
-	{ title: 'Damage Assessment', href: '#damage-assessment' },
-	{ title: 'Repair Assessment', href: '#repair-assessment' },
-	{ title: "I Don't Know What's Wrong", href: '#diagnostic-intake' },
+	{ title: 'Jewellery Inspection', href: '/services?category=inspection&service=jewellery-inspection' },
+	{ title: 'Damage Assessment', href: '/services?category=inspection&service=damage-assessment' },
+	{ title: 'Repair Assessment', href: '/services?category=inspection&service=repair-assessment' },
+	{ title: "I Don't Know What's Wrong", href: '/services?category=inspection&service=diagnostic-intake' },
 ];
 
 // CONSULTATION DATA
