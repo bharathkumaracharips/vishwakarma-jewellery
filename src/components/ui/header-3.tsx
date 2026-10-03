@@ -49,7 +49,7 @@ export function Header() {
 				{/* ---------------- 1. BRAND LOGO (End of Left with Slight Gap) ---------------- */}
 				<div className="flex items-center flex-shrink-0">
 					<a
-						href="#"
+						href="/"
 						className="group flex flex-col items-start gap-1 py-1 transition-opacity hover:opacity-90"
 					>
 						<span className="font-serif text-xl sm:text-[22px] font-bold tracking-[0.24em] uppercase text-white leading-none">
@@ -811,40 +811,39 @@ function MobileMenu({ open, children, className, ...props }: MobileMenuProps) {
 
 // SHOP DATA
 const jewelleryCol1 = [
-	{ title: 'Rings', href: '#rings' },
-	{ title: 'Necklaces', href: '#necklaces' },
-	{ title: 'Chains', href: '#chains' },
-	{ title: 'Bangles', href: '#bangles' },
-	{ title: 'Bracelets', href: '#bracelets' },
-	{ title: 'Earrings', href: '#earrings' },
-	{ title: 'Pendants', href: '#pendants' },
+	{ title: 'Rings', href: '/shop?category=rings' },
+	{ title: 'Necklaces', href: '/shop?category=necklaces' },
+	{ title: 'Chains', href: '/shop?category=chains' },
+	{ title: 'Bangles', href: '/shop?category=bangles' },
+	{ title: 'Bracelets', href: '/shop?category=bangles' },
+	{ title: 'Earrings', href: '/shop?category=earrings' },
+	{ title: 'Pendants', href: '/shop?category=pendants' },
 ];
 
 const jewelleryCol2 = [
-	{ title: 'Mangalsutra', href: '#mangalsutra' },
-	{ title: 'Nose Jewellery', href: '#nose-jewellery' },
-	{ title: 'Anklets', href: '#anklets' },
-	{ title: 'Toe Rings', href: '#toe-rings' },
-	{ title: 'Hair Jewellery', href: '#hair-jewellery' },
-	{ title: 'Jewellery Sets', href: '#jewellery-sets' },
+	{ title: 'Mangalsutra', href: '/shop?category=mangalsutra' },
+	{ title: 'Nose Jewellery', href: '/shop?category=rings' },
+	{ title: 'Anklets', href: '/shop?category=chains' },
+	{ title: 'Toe Rings', href: '/shop?category=rings' },
+	{ title: 'Hair Jewellery', href: '/shop?category=pendants' },
+	{ title: 'Jewellery Sets', href: '/shop?category=necklaces' },
 ];
 
 const collectionsList = [
-	{ title: 'New Arrivals', href: '#new-arrivals' },
-	{ title: 'Trending', href: '#trending' },
-	{ title: 'Bridal', href: '#bridal' },
-	{ title: 'Daily Wear', href: '#daily-wear' },
-	{ title: 'Traditional', href: '#traditional' },
-	{ title: 'Contemporary', href: '#contemporary' },
-	{ title: 'Designer', href: '#designer' },
+	{ title: 'New Arrivals', href: '/shop?category=all' },
+	{ title: 'Trending', href: '/shop?collection=bridal' },
+	{ title: 'The Bridal Treasury', href: '/shop?collection=bridal' },
+	{ title: 'Daily Wear', href: '/shop?collection=daily' },
+	{ title: 'Temple & Heritage', href: '/shop?collection=temple' },
+	{ title: 'Contemporary Fine', href: '/shop?collection=contemporary' },
+	{ title: 'All Archives', href: '/shop' },
 ];
 
 const shopByList = [
-	{ title: 'Handmade', href: '#handmade' },
-	{ title: 'Handcrafted', href: '#handcrafted' },
-	{ title: 'Lightweight', href: '#lightweight' },
-	{ title: 'Custom Made', href: '#custom-made' },
-	{ title: 'Gold Jewellery', href: '#gold-jewellery' },
+	{ title: 'All Collections', href: '/shop?craft=all' },
+	{ title: 'Handcrafted (100% Karigar)', href: '/shop?craft=handcrafted' },
+	{ title: 'Semi Handmade (Precision Cast)', href: '/shop?craft=semi-handmade' },
+	{ title: 'All Jewellery Pieces', href: '/shop' },
 ];
 
 // JEWELLERY SERVICES DATA
