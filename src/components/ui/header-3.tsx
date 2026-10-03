@@ -179,6 +179,33 @@ export function Header() {
 											</ul>
 										</div>
 									</div>
+
+									{/* Bottom Co-Creation Teaser Strip */}
+									<div className="mt-5 border-t border-white/[0.08] pt-3.5">
+										<a
+											href="#make-it-yours"
+											onClick={(e) => {
+												e.preventDefault();
+												setActiveDropdown(null);
+												const el = document.querySelector('section');
+												if (el) {
+													const top = el.offsetTop + el.scrollHeight * 0.32;
+													window.scrollTo({ top, behavior: 'smooth' });
+												}
+											}}
+											className="group/strip flex flex-col sm:flex-row sm:items-center justify-between gap-1 w-full rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#fae19c]/30 hover:bg-[#fae19c]/[0.04] px-4 py-2.5 transition-all"
+										>
+											<div className="flex items-center gap-2">
+												<span className="text-[#fae19c] text-xs">✨</span>
+												<span className="text-xs font-semibold text-white tracking-wider uppercase group-hover/strip:text-[#fae19c] transition-colors">
+													Found something you love? Make it yours →
+												</span>
+											</div>
+											<span className="text-[11px] text-neutral-400 font-light">
+												Customize metal • approx. weight • stones • colour • budget
+											</span>
+										</a>
+									</div>
 								</div>
 							</div>
 						)}
