@@ -9,6 +9,54 @@ import { EventNode, MilestoneDrawer } from './components/EventNode';
 import { ActionRouter } from './components/ActionRouter';
 import { ChevronDown, Sparkles, Scale, ShieldCheck, Video, MapPin, Check } from 'lucide-react';
 
+// Continuous smooth cross-fade interpolation for buttery cinematic chapter transitions
+function getChapterTransitionStyle(progress: number, range: [number, number]) {
+	const [start, end] = range;
+	const duration = end - start;
+	// 25% smooth dissolve margin
+	const buffer = duration * 0.22;
+	const fadeInStart = start - buffer;
+	const fadeInEnd = start + buffer;
+	const fadeOutStart = end - buffer;
+	const fadeOutEnd = end + buffer;
+
+	if (progress < fadeInStart || progress > fadeOutEnd) {
+		return {
+			opacity: 0,
+			transform: progress < fadeInStart ? 'translateY(24px) scale(0.98)' : 'translateY(-24px) scale(0.98)',
+			pointerEvents: 'none' as const,
+			visibility: 'hidden' as const,
+		};
+	}
+
+	let opacity = 1;
+	let translateY = 0;
+	let scale = 1;
+
+	if (progress < fadeInEnd) {
+		const t = Math.max(0, Math.min(1, (progress - fadeInStart) / (fadeInEnd - fadeInStart)));
+		// Smooth cubic ease-in-out curve
+		const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+		opacity = ease;
+		translateY = (1 - ease) * 24;
+		scale = 0.98 + ease * 0.02;
+	} else if (progress > fadeOutStart) {
+		const t = Math.max(0, Math.min(1, (progress - fadeOutStart) / (fadeOutEnd - fadeOutStart)));
+		const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+		opacity = 1 - ease;
+		translateY = -ease * 24;
+		scale = 1 - ease * 0.02;
+	}
+
+	return {
+		opacity,
+		transform: `translateY(${translateY}px) scale(${scale})`,
+		pointerEvents: opacity > 0.4 ? ('auto' as const) : ('none' as const),
+		visibility: 'visible' as const,
+		transition: 'opacity 0.2s ease-out, transform 0.2s ease-out',
+	};
+}
+
 export function LifeOfAJewel() {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [progress, setProgress] = useState(0);
@@ -41,16 +89,9 @@ export function LifeOfAJewel() {
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, []);
 
-	// Determine active chapter based on progress range
-	const currentChapterIndex = CHAPTERS.findIndex(
-		(ch) => progress >= ch.range[0] && progress < ch.range[1]
-	);
-	const activeChapter = CHAPTERS[currentChapterIndex !== -1 ? currentChapterIndex : CHAPTERS.length - 1];
-
 	// Action router handler
 	const handleSelectAction = (actionKey: string) => {
 		if (actionKey === 'customize') {
-			// Jump scroll to Make It Yours chapter
 			if (containerRef.current) {
 				const top = containerRef.current.offsetTop + containerRef.current.scrollHeight * 0.32;
 				window.scrollTo({ top, behavior: 'smooth' });
@@ -60,8 +101,8 @@ export function LifeOfAJewel() {
 		}
 	};
 
-	const isExploded = activeChapter.id === '02-the-karigar';
-	const isMakeItYours = activeChapter.id === '04-make-it-yours' || activeChapter.id === '05-your-version';
+	// Determine if exploded view is active around Chapter 02 (0.08 -> 0.16)
+	const isExploded = progress >= 0.08 && progress <= 0.18;
 
 	return (
 		<section
@@ -69,53 +110,19 @@ export function LifeOfAJewel() {
 			className="relative w-full bg-[#08090d] text-white selection:bg-[#fae19c]/20 selection:text-[#fae19c]"
 			style={{ height: '750vh' }}
 		>
-			{/* Sticky Viewport Stage (Takes over the screen as patron scrolls naturally) */}
+			{/* Sticky Viewport Stage with pure, unobstructed view */}
 			<div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between p-4 sm:p-8 lg:p-12 z-20">
-				{/* ---------------- 1. TOP HEADER & CHAPTER SCRUBBER ---------------- */}
-				<div className="relative z-30 flex items-center justify-between border-b border-white/[0.08] pb-4">
-					<div className="flex items-center gap-3">
-						<span className="font-serif text-xs sm:text-sm font-bold tracking-[0.22em] uppercase text-[#fae19c]">
-							The Life of a Jewel
-						</span>
-						<span className="text-neutral-600">•</span>
-						<span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400">
-							Chapter {activeChapter.number} of 12
-						</span>
-					</div>
-
-					{/* Chapter Name & Subtitle */}
-					<div className="hidden md:flex items-center gap-2">
-						<span className="text-xs font-semibold uppercase tracking-wider text-white">
-							{activeChapter.title}
-						</span>
-						<span className="text-neutral-600">—</span>
-						<span className="text-xs text-neutral-400 font-light max-w-sm truncate">
-							{activeChapter.subtitle}
-						</span>
-					</div>
-
-					{/* Progress Pill */}
-					<div className="flex items-center gap-2">
-						<div className="h-1.5 w-24 sm:w-32 rounded-full bg-white/10 overflow-hidden">
-							<div
-								className="h-full bg-gradient-to-r from-[#fae19c] to-[#d4af37] transition-all duration-150"
-								style={{ width: `${progress * 100}%` }}
-							/>
-						</div>
-						<span className="text-[10px] font-mono text-neutral-400">
-							{Math.round(progress * 100)}%
-						</span>
-					</div>
-				</div>
-
-				{/* ---------------- 2. CONTINUOUS GOLDEN TRACE ---------------- */}
+				{/* ---------------- 1. ELEGANT SIDE GOLDEN TRACE RAIL ---------------- */}
 				<GoldenTrace progress={progress} />
 
-				{/* ---------------- 3. MAIN CINEMATIC STAGE ---------------- */}
+				{/* ---------------- 2. CONTINUOUS MAIN CINEMATIC STAGE ---------------- */}
 				<div className="relative z-20 size-full flex items-center justify-center my-auto">
 					{/* ================= CHAPTER 01: RAW GOLD ================= */}
-					{activeChapter.id === '01-raw-gold' && (
-						<div className="text-center space-y-4 max-w-xl mx-auto animate-in fade-in zoom-in-95 duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[0].range)}
+					>
+						<div className="text-center space-y-4 max-w-xl mx-auto px-4">
 							<div className="inline-flex items-center gap-2 rounded-full border border-[#fae19c]/30 bg-[#fae19c]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#fae19c]">
 								<Sparkles className="size-3" />
 								<span>Material Genesis</span>
@@ -130,11 +137,14 @@ export function LifeOfAJewel() {
 								<span>Scroll to follow ↓</span>
 							</div>
 						</div>
-					)}
+					</div>
 
 					{/* ================= CHAPTER 02: THE KARIGAR ================= */}
-					{activeChapter.id === '02-the-karigar' && (
-						<div className="grid grid-cols-1 md:grid-cols-12 w-full max-w-5xl items-center gap-8 animate-in fade-in duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[1].range)}
+					>
+						<div className="grid grid-cols-1 md:grid-cols-12 w-full max-w-5xl items-center gap-8 px-4">
 							<div className="md:col-span-5 space-y-3">
 								<span className="text-[10px] font-mono uppercase tracking-widest text-[#fae19c]">
 									02 • The Artisan Workbench
@@ -161,15 +171,18 @@ export function LifeOfAJewel() {
 								<JewelleryAsset
 									configuration={configuration}
 									progress={progress}
-									isExploded={true}
+									isExploded={isExploded}
 								/>
 							</div>
 						</div>
-					)}
+					</div>
 
 					{/* ================= CHAPTER 03: GOLD TO ORNAMENT ================= */}
-					{activeChapter.id === '03-gold-to-ornament' && (
-						<div className="text-center space-y-4 max-w-lg mx-auto animate-in fade-in duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[2].range)}
+					>
+						<div className="text-center space-y-4 max-w-lg mx-auto px-4">
 							<JewelleryAsset
 								configuration={configuration}
 								progress={progress}
@@ -184,11 +197,14 @@ export function LifeOfAJewel() {
 								</p>
 							</div>
 						</div>
-					)}
+					</div>
 
-					{/* ================= CHAPTER 04 & 05: MAKE IT YOURS (CONFIGURATOR) ================= */}
-					{isMakeItYours && (
-						<div className="grid grid-cols-1 lg:grid-cols-12 w-full max-w-5xl items-center gap-6 lg:gap-12 animate-in fade-in duration-500">
+					{/* ================= CHAPTER 04: MAKE IT YOURS (CONFIGURATOR) ================= */}
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[3].range)}
+					>
+						<div className="grid grid-cols-1 lg:grid-cols-12 w-full max-w-5xl items-center gap-6 lg:gap-12 px-4">
 							{/* Left: The Central Responsive Jewel */}
 							<div className="lg:col-span-6 flex flex-col items-center justify-center">
 								<JewelleryAsset
@@ -219,11 +235,78 @@ export function LifeOfAJewel() {
 								/>
 							</div>
 						</div>
-					)}
+					</div>
+
+					{/* ================= CHAPTER 05: YOUR CONFIGURATION (PEDESTAL & SUMMARY) ================= */}
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[4].range)}
+					>
+						<div className="grid grid-cols-1 lg:grid-cols-12 w-full max-w-4xl items-center gap-8 px-4">
+							<div className="lg:col-span-6 flex justify-center">
+								<JewelleryAsset
+									configuration={configuration}
+									progress={progress}
+									isExploded={false}
+								/>
+							</div>
+
+							<div className="lg:col-span-6 space-y-4 rounded-2xl border border-[#fae19c]/30 bg-[#0e0f17]/90 p-6 backdrop-blur-xl shadow-2xl">
+								<div className="flex items-center justify-between border-b border-white/10 pb-3">
+									<span className="text-[10px] font-mono uppercase tracking-widest text-[#fae19c]">
+										05 • Configured Heirloom
+									</span>
+									<span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] font-mono text-neutral-300">
+										{configuration.baseDesignId}
+									</span>
+								</div>
+
+								<div>
+									<h3 className="font-serif text-xl font-semibold text-white">
+										{configuration.baseDesignName}
+									</h3>
+									<p className="text-xs text-neutral-400 font-light mt-1">
+										Configured with your bespoke parameters and registered to your atelier session.
+									</p>
+								</div>
+
+								<div className="grid grid-cols-2 gap-2 text-xs">
+									<div className="rounded-xl border border-white/5 bg-white/[0.02] p-2.5">
+										<span className="text-neutral-500 block text-[9px] uppercase font-mono">Metal Purity</span>
+										<span className="font-medium text-white">{configuration.metal.purity} {configuration.metal.tone}</span>
+									</div>
+									<div className="rounded-xl border border-white/5 bg-white/[0.02] p-2.5">
+										<span className="text-neutral-500 block text-[9px] uppercase font-mono">Approx. Weight</span>
+										<span className="font-medium text-white">~{configuration.approxWeight.toFixed(1)} g</span>
+									</div>
+									<div className="rounded-xl border border-white/5 bg-white/[0.02] p-2.5">
+										<span className="text-neutral-500 block text-[9px] uppercase font-mono">Center Stone</span>
+										<span className="font-medium text-white">{configuration.stone.type}</span>
+									</div>
+									<div className="rounded-xl border border-white/5 bg-white/[0.02] p-2.5">
+										<span className="text-neutral-500 block text-[9px] uppercase font-mono">Estimated Range</span>
+										<span className="font-serif font-bold text-[#fae19c]">₹{configuration.budget.min.toLocaleString('en-IN')} – ₹{configuration.budget.max.toLocaleString('en-IN')}</span>
+									</div>
+								</div>
+
+								<div className="pt-2 space-y-2">
+									<button
+										onClick={() => setActiveModal('quote')}
+										className="w-full rounded-xl bg-gradient-to-r from-[#fae19c] to-[#d4af37] py-3 text-xs font-bold uppercase tracking-wider text-black hover:brightness-105 cursor-pointer shadow-md"
+									>
+										Request Atelier Quote →
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
 
 					{/* ================= CHAPTER 06: WHAT YOU ALREADY OWN ================= */}
-					{activeChapter.id === '06-what-you-own' && (
-						<div className="text-center space-y-5 max-w-2xl mx-auto animate-in fade-in duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[5].range)}
+					>
+						<div className="text-center space-y-5 max-w-2xl mx-auto px-4">
 							<span className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#fae19c]">
 								06 • Heirloom Care & Restoration
 							</span>
@@ -246,11 +329,14 @@ export function LifeOfAJewel() {
 								)}
 							</div>
 						</div>
-					)}
+					</div>
 
 					{/* ================= CHAPTER 07: PRECISION & CUSTODY ================= */}
-					{activeChapter.id === '07-precision-custody' && (
-						<div className="w-full max-w-3xl mx-auto space-y-6 animate-in fade-in duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[6].range)}
+					>
+						<div className="w-full max-w-3xl mx-auto space-y-6 px-4">
 							<div className="text-center space-y-1">
 								<span className="text-[10px] font-mono uppercase tracking-widest text-[#fae19c]">
 									07 • Honest Precision & Custody
@@ -288,11 +374,14 @@ export function LifeOfAJewel() {
 								</div>
 							</div>
 						</div>
-					)}
+					</div>
 
 					{/* ================= CHAPTER 08: THE GOLDEN TRACE ================= */}
-					{activeChapter.id === '08-golden-trace' && (
-						<div className="text-center space-y-4 max-w-lg mx-auto animate-in fade-in duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[7].range)}
+					>
+						<div className="text-center space-y-4 max-w-lg mx-auto px-4">
 							<span className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#fae19c]">
 								08 • The Unbroken Lifeline
 							</span>
@@ -303,11 +392,14 @@ export function LifeOfAJewel() {
 								A continuous line that follows your jewellery from drop-off, through the master goldsmith bench, quality inspection, and back into your hands.
 							</p>
 						</div>
-					)}
+					</div>
 
 					{/* ================= CHAPTER 09: VERIFIABLE LEDGER ================= */}
-					{activeChapter.id === '09-verifiable-ledger' && (
-						<div className="w-full max-w-xl mx-auto space-y-4 animate-in fade-in duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[8].range)}
+					>
+						<div className="w-full max-w-xl mx-auto space-y-4 px-4">
 							<div className="text-center space-y-1">
 								<span className="text-[10px] font-mono uppercase tracking-widest text-[#fae19c]">
 									09 • The Invisible Ledger
@@ -321,7 +413,7 @@ export function LifeOfAJewel() {
 							</div>
 
 							<div className="space-y-2">
-								{['EVENT #01: Intake Registered (14.280g)', 'EVENT #02: Goldsmith Assigned & Solder', 'EVENT #03: Sonic Polish & Stone Setting', 'EVENT #04: Final Hallmark Audit Verified'].map((ev, i) => (
+								{['EVENT #01: Intake Registered (14.280g)', 'EVENT #02: Goldsmith Assigned & Solder', 'EVENT #03: Sonic Polish & Stone Setting', 'EVENT #04: Final Hallmark Audit Verified'].map((ev) => (
 									<div
 										key={ev}
 										className="flex items-center justify-between rounded-xl border border-white/10 bg-black/50 p-3 text-xs"
@@ -334,11 +426,14 @@ export function LifeOfAJewel() {
 								))}
 							</div>
 						</div>
-					)}
+					</div>
 
 					{/* ================= CHAPTER 10: REAL-TIME TRACKING ================= */}
-					{activeChapter.id === '10-real-time-tracking' && (
-						<div className="w-full max-w-2xl mx-auto space-y-4 animate-in fade-in duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[9].range)}
+					>
+						<div className="w-full max-w-2xl mx-auto space-y-4 px-4">
 							<div className="text-center space-y-1">
 								<span className="text-[10px] font-mono uppercase tracking-widest text-[#fae19c]">
 									10 • Live Journey
@@ -362,11 +457,14 @@ export function LifeOfAJewel() {
 								))}
 							</div>
 						</div>
-					)}
+					</div>
 
 					{/* ================= CHAPTER 11: CONSULTATION ================= */}
-					{activeChapter.id === '11-consultation' && (
-						<div className="w-full max-w-3xl mx-auto space-y-6 text-center animate-in fade-in duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[10].range)}
+					>
+						<div className="w-full max-w-3xl mx-auto space-y-6 text-center px-4">
 							<div className="space-y-1">
 								<span className="text-[10px] font-mono uppercase tracking-widest text-[#fae19c]">
 									11 • Human Expertise
@@ -388,7 +486,7 @@ export function LifeOfAJewel() {
 									</p>
 									<button
 										onClick={() => setActiveModal('consultation')}
-										className="text-xs font-semibold text-[#fae19c] hover:underline"
+										className="text-xs font-semibold text-[#fae19c] hover:underline cursor-pointer"
 									>
 										Schedule Online Call →
 									</button>
@@ -402,18 +500,21 @@ export function LifeOfAJewel() {
 									</p>
 									<button
 										onClick={() => setActiveModal('consultation')}
-										className="text-xs font-semibold text-[#fae19c] hover:underline"
+										className="text-xs font-semibold text-[#fae19c] hover:underline cursor-pointer"
 									>
 										Book In-Person Visit →
 									</button>
 								</div>
 							</div>
 						</div>
-					)}
+					</div>
 
 					{/* ================= CHAPTER 12: YOUR CHOICE ================= */}
-					{activeChapter.id === '12-your-choice' && (
-						<div className="w-full max-w-4xl mx-auto space-y-6 text-center animate-in fade-in duration-500">
+					<div
+						className="absolute inset-0 size-full flex items-center justify-center"
+						style={getChapterTransitionStyle(progress, CHAPTERS[11].range)}
+					>
+						<div className="w-full max-w-4xl mx-auto space-y-6 text-center px-4">
 							<div className="space-y-2">
 								<div className="flex items-center justify-center gap-2 text-xs font-serif tracking-[0.25em] text-[#fae19c] uppercase">
 									<span>Your Jewellery</span>
@@ -429,10 +530,10 @@ export function LifeOfAJewel() {
 
 							<ActionRouter onSelectAction={handleSelectAction} />
 						</div>
-					)}
+					</div>
 				</div>
 
-				{/* ---------------- 4. BOTTOM NARRATIVE STRIP & CONTROLS ---------------- */}
+				{/* ---------------- 3. SUBTLE BOTTOM STATUS & SKIP ---------------- */}
 				<div className="relative z-30 flex items-center justify-between border-t border-white/[0.08] pt-3 text-[11px] text-neutral-400 font-mono">
 					<div>
 						<span>VISHWAKARMA VAULT</span>
@@ -441,9 +542,6 @@ export function LifeOfAJewel() {
 					</div>
 
 					<div className="flex items-center gap-4">
-						<span className="hidden sm:inline text-neutral-500">
-							Natural scroll enabled • Non-blocking
-						</span>
 						<button
 							onClick={() => {
 								if (containerRef.current) {
@@ -453,7 +551,7 @@ export function LifeOfAJewel() {
 							}}
 							className="text-[#fae19c] hover:underline cursor-pointer flex items-center gap-1"
 						>
-							<span>Skip to End</span>
+							<span>Explore All</span>
 							<ChevronDown className="size-3.5" />
 						</button>
 					</div>
@@ -466,7 +564,7 @@ export function LifeOfAJewel() {
 				onClose={() => setSelectedMilestone(null)}
 			/>
 
-			{/* Interactive Action Modals (Quote, Saved, Consultation) */}
+			{/* Interactive Action Modals */}
 			{activeModal && (
 				<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
 					<div

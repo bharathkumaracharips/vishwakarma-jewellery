@@ -9,11 +9,11 @@ interface GoldenTraceProps {
 }
 
 export function GoldenTrace({ progress, className = '' }: GoldenTraceProps) {
-	// Active chapter index
-	const activeIndex = Math.min(
-		Math.floor(progress * CHAPTERS.length),
-		CHAPTERS.length - 1
+	// Active chapter index precisely matched to chapter scroll ranges
+	const detectedIndex = CHAPTERS.findIndex(
+		(ch) => progress >= ch.range[0] && progress < ch.range[1]
 	);
+	const activeIndex = detectedIndex !== -1 ? detectedIndex : (progress >= 1 ? CHAPTERS.length - 1 : 0);
 
 	return (
 		<div
