@@ -166,10 +166,10 @@ export function CircularImageGallery({
 					e.stopPropagation();
 					handlePrev();
 				}}
-				className="absolute left-3 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-white/50 hover:bg-black/70 cursor-pointer shadow-md"
+				className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 flex size-7 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-white/50 hover:bg-black/80 cursor-pointer shadow-md"
 				aria-label="Previous image"
 			>
-				<ChevronLeft className="size-4" />
+				<ChevronLeft className="size-3.5" />
 			</button>
 
 			<button
@@ -178,41 +178,43 @@ export function CircularImageGallery({
 					e.stopPropagation();
 					handleNext();
 				}}
-				className="absolute right-3 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-white/50 hover:bg-black/70 cursor-pointer shadow-md"
+				className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 flex size-7 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-white/50 hover:bg-black/80 cursor-pointer shadow-md"
 				aria-label="Next image"
 			>
-				<ChevronRight className="size-4" />
+				<ChevronRight className="size-3.5" />
 			</button>
 
 			{/* Content Container (Pinned to Bottom) */}
-			<div className="relative z-10 size-full p-5 sm:p-6 flex flex-col justify-end">
+			<div className="relative z-10 size-full p-3 sm:p-3.5 flex flex-col justify-end">
 				{/* Top Badges */}
-				<div className="flex items-center gap-2 mb-3">
-					<span className="rounded-md border border-neutral-700/70 bg-[#1c1c22]/85 px-2.5 py-1 text-[11px] font-normal text-neutral-300 backdrop-blur-md transition-all">
+				<div className="flex items-center gap-1.5 mb-2">
+					<span className="rounded-md border border-white/10 bg-[#16161c]/85 px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-neutral-300 backdrop-blur-md transition-all">
 						{currentItem.tag1}
 					</span>
-					<span className="rounded-md border border-neutral-700/70 bg-[#1c1c22]/85 px-2.5 py-1 text-[11px] font-normal text-neutral-300 backdrop-blur-md transition-all">
+					<span className="rounded-md border border-white/10 bg-[#16161c]/85 px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-neutral-300 backdrop-blur-md transition-all">
 						{currentItem.tag2}
 					</span>
 				</div>
 
 				{/* Floating Testimonial Quote Card */}
-				<div className="rounded-xl border border-white/[0.12] bg-[#141418]/80 p-4 sm:p-5 backdrop-blur-xl shadow-2xl transition-all duration-300">
-					<p className="text-xs sm:text-[13px] text-neutral-200 font-normal leading-relaxed">
-						{currentItem.quote}
+				<div className="rounded-xl border border-white/[0.1] bg-[#121318]/85 p-3 sm:p-3.5 backdrop-blur-xl shadow-xl transition-all duration-300">
+					<p className="text-[11px] sm:text-xs text-neutral-200 font-light leading-relaxed">
+						&ldquo;{currentItem.quote}&rdquo;
 					</p>
-					<div className="mt-3.5">
-						<div className="text-xs font-semibold text-white tracking-wide">
-							{currentItem.author}
-						</div>
-						<div className="text-[11px] text-neutral-400">
-							{currentItem.role}
+					<div className="mt-2.5 flex items-center justify-between">
+						<div>
+							<div className="text-[11px] font-medium text-white tracking-wide">
+								{currentItem.author}
+							</div>
+							<div className="text-[9px] text-neutral-400">
+								{currentItem.role}
+							</div>
 						</div>
 					</div>
 				</div>
 
 				{/* Circular Thumbnail Tabs with glowing active indicator */}
-				<div className="mt-4 flex items-center justify-center gap-2.5">
+				<div className="mt-2.5 flex items-center justify-center gap-2">
 					{items.map((item, idx) => {
 						const isActive = idx === currentIndex;
 						return (
@@ -221,18 +223,17 @@ export function CircularImageGallery({
 								type="button"
 								onClick={(e) => {
 									e.stopPropagation();
-									const rect = e.currentTarget.getBoundingClientRect();
 									handleNavigate(idx, 50, 85);
 								}}
 								className={`group/thumb relative rounded-full transition-all duration-300 cursor-pointer ${
 									isActive
-										? 'scale-110 ring-2 ring-[#ea9428] ring-offset-2 ring-offset-black'
+										? 'scale-110 ring-2 ring-[#fae19c] ring-offset-2 ring-offset-black'
 										: 'opacity-55 hover:opacity-100 hover:scale-105'
 								}`}
 								aria-label={`View ${item.title}`}
 							>
 								{/* Circular image thumbnail */}
-								<div className="size-6 sm:size-7 overflow-hidden rounded-full border border-white/30 shadow-md">
+								<div className="size-5 sm:size-5.5 overflow-hidden rounded-full border border-white/30 shadow-md">
 									<img
 										src={item.image}
 										alt={item.title}
