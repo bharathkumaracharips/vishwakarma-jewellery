@@ -6,12 +6,6 @@ import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { createPortal } from 'react-dom';
 import { ChevronDown } from 'lucide-react';
 
-type SimpleLinkItem = {
-	title: string;
-	href: string;
-	description?: string;
-};
-
 export function Header() {
 	const [open, setOpen] = useState(false);
 	const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -65,9 +59,9 @@ export function Header() {
 					</a>
 				</div>
 
-				{/* ---------------- 2. MAIN NAVIGATION (Spaced Apart, Not Attached to Logo) ---------------- */}
+				{/* ---------------- 2. MAIN NAVIGATION (Centered Dropdowns) ---------------- */}
 				<div className="hidden lg:flex items-center gap-8 xl:gap-10 2xl:gap-12">
-					{/* ITEM 1: SHOP (Mega menu) */}
+					{/* ITEM 1: SHOP (Mega menu - Clean Centered) */}
 					<div
 						className="relative flex-shrink-0"
 						onMouseEnter={() => handleMouseEnter('shop')}
@@ -101,53 +95,94 @@ export function Header() {
 							/>
 						</button>
 
-						{/* Dropdown Box: Anchored right below SHOP */}
+						{/* SHOP Dropdown: Centered from hovered position */}
 						{activeDropdown === 'shop' && (
-							<div className="absolute top-full left-0 pt-3 z-50 animate-in fade-in-50 zoom-in-98 duration-150">
-								<div className="w-[680px] rounded-xl border border-white/[0.1] bg-[#0c0d14]/98 p-6 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-2xl">
-									<div className="mb-4 flex items-center justify-between border-b border-white/[0.08] pb-3">
-										<span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#fae19c]">
-											Signature Haute Joaillerie & Bridal Suites
-										</span>
-										<span className="text-[10px] text-slate-400 tracking-wider">
-											100% BIS Hallmarked 22K & 18K
-										</span>
-									</div>
+							<div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50 animate-in fade-in-50 zoom-in-98 duration-150">
+								<div className="w-[780px] rounded-2xl border border-white/[0.09] bg-[#0c0d14]/98 p-7 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-2xl">
+									<div className="grid grid-cols-12 gap-7">
+										{/* JEWELLERY (2 sub-columns for 13 items) */}
+										<div className="col-span-6">
+											<div className="mb-3 border-b border-white/[0.07] pb-2.5">
+												<span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[#fae19c]">
+													JEWELLERY
+												</span>
+											</div>
+											<div className="grid grid-cols-2 gap-x-4">
+												<ul className="space-y-1.5">
+													{jewelleryCol1.map((item) => (
+														<li key={item.title}>
+															<a
+																href={item.href}
+																className="block text-[12.5px] font-normal text-slate-300 hover:text-[#fae19c] transition-colors py-0.5"
+															>
+																{item.title}
+															</a>
+														</li>
+													))}
+												</ul>
+												<ul className="space-y-1.5">
+													{jewelleryCol2.map((item) => (
+														<li key={item.title}>
+															<a
+																href={item.href}
+																className="block text-[12.5px] font-normal text-slate-300 hover:text-[#fae19c] transition-colors py-0.5"
+															>
+																{item.title}
+															</a>
+														</li>
+													))}
+												</ul>
+											</div>
+										</div>
 
-									<div className="grid grid-cols-2 gap-x-8 gap-y-1.5">
-										<ul className="space-y-1">
-											{shopCategoriesCol1.map((item, i) => (
-												<li key={i}>
-													<TextListItem {...item} />
-												</li>
-											))}
-										</ul>
-										<ul className="space-y-1">
-											{shopCategoriesCol2.map((item, i) => (
-												<li key={i}>
-													<TextListItem {...item} />
-												</li>
-											))}
-										</ul>
-									</div>
+										{/* COLLECTIONS */}
+										<div className="col-span-3 border-l border-white/[0.06] pl-6">
+											<div className="mb-3 border-b border-white/[0.07] pb-2.5">
+												<span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[#fae19c]">
+													COLLECTIONS
+												</span>
+											</div>
+											<ul className="space-y-1.5">
+												{collectionsList.map((item) => (
+													<li key={item.title}>
+														<a
+															href={item.href}
+															className="block text-[12.5px] font-normal text-slate-300 hover:text-[#fae19c] transition-colors py-0.5"
+														>
+															{item.title}
+														</a>
+													</li>
+												))}
+											</ul>
+										</div>
 
-									<div className="mt-5 flex items-center justify-between border-t border-white/[0.08] pt-3 text-[11px]">
-										<span className="text-slate-400">
-											Solitaires, temple nakshi & uncut syndicate Polki diamonds
-										</span>
-										<a
-											href="#catalog"
-											className="font-semibold tracking-[0.1em] uppercase text-[#fae19c] hover:underline"
-										>
-											View All Collections &rarr;
-										</a>
+										{/* SHOP BY */}
+										<div className="col-span-3 border-l border-white/[0.06] pl-6">
+											<div className="mb-3 border-b border-white/[0.07] pb-2.5">
+												<span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[#fae19c]">
+													SHOP BY
+												</span>
+											</div>
+											<ul className="space-y-1.5">
+												{shopByList.map((item) => (
+													<li key={item.title}>
+														<a
+															href={item.href}
+															className="block text-[12.5px] font-normal text-slate-300 hover:text-[#fae19c] transition-colors py-0.5"
+														>
+															{item.title}
+														</a>
+													</li>
+												))}
+											</ul>
+										</div>
 									</div>
 								</div>
 							</div>
 						)}
 					</div>
 
-					{/* ITEM 2: JEWELLERY SERVICES (Mega menu) */}
+					{/* ITEM 2: JEWELLERY SERVICES (Mega menu - Clean Centered) */}
 					<div
 						className="relative flex-shrink-0"
 						onMouseEnter={() => handleMouseEnter('services')}
@@ -181,45 +216,127 @@ export function Header() {
 							/>
 						</button>
 
-						{/* Dropdown Box: Anchored right below JEWELLERY SERVICES */}
+						{/* JEWELLERY SERVICES Dropdown: Centered from hovered position */}
 						{activeDropdown === 'services' && (
-							<div className="absolute top-full left-0 pt-3 z-50 animate-in fade-in-50 zoom-in-98 duration-150">
-								<div className="w-[620px] rounded-xl border border-white/[0.1] bg-[#0c0d14]/98 p-6 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-2xl">
-									<div className="mb-4 flex items-center justify-between border-b border-white/[0.08] pb-3">
-										<span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#fae19c]">
-											Atelier Care & Jewellery Hospital
-										</span>
-										<span className="text-[10px] text-slate-400 tracking-wider">
-											Master Goldsmith Certified
-										</span>
+							<div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50 animate-in fade-in-50 zoom-in-98 duration-150">
+								<div className="w-[980px] rounded-2xl border border-white/[0.09] bg-[#0c0d14]/98 p-7 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-2xl">
+									<div className="grid grid-cols-5 gap-6">
+										{/* Column 1: REPAIR */}
+										<div>
+											<div className="mb-3 border-b border-white/[0.07] pb-2.5">
+												<span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[#fae19c]">
+													REPAIR
+												</span>
+											</div>
+											<ul className="space-y-1.5">
+												{repairServicesList.map((item) => (
+													<li key={item.title}>
+														<a
+															href={item.href}
+															className="block text-[12.5px] font-normal text-slate-300 hover:text-[#fae19c] transition-colors py-0.5 whitespace-nowrap"
+														>
+															{item.title}
+														</a>
+													</li>
+												))}
+											</ul>
+										</div>
+
+										{/* Column 2: CARE & RESTORATION */}
+										<div className="border-l border-white/[0.06] pl-5">
+											<div className="mb-3 border-b border-white/[0.07] pb-2.5">
+												<span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[#fae19c]">
+													CARE & RESTORATION
+												</span>
+											</div>
+											<ul className="space-y-1.5">
+												{careRestorationList.map((item) => (
+													<li key={item.title}>
+														<a
+															href={item.href}
+															className="block text-[12.5px] font-normal text-slate-300 hover:text-[#fae19c] transition-colors py-0.5 whitespace-nowrap"
+														>
+															{item.title}
+														</a>
+													</li>
+												))}
+											</ul>
+										</div>
+
+										{/* Column 3: RESIZING & MODIFICATION */}
+										<div className="border-l border-white/[0.06] pl-5">
+											<div className="mb-3 border-b border-white/[0.07] pb-2.5">
+												<span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[#fae19c]">
+													RESIZING & MODIFICATION
+												</span>
+											</div>
+											<ul className="space-y-1.5">
+												{resizingModificationList.map((item) => (
+													<li key={item.title}>
+														<a
+															href={item.href}
+															className="block text-[12.5px] font-normal text-slate-300 hover:text-[#fae19c] transition-colors py-0.5 whitespace-nowrap"
+														>
+															{item.title}
+														</a>
+													</li>
+												))}
+											</ul>
+										</div>
+
+										{/* Column 4: STONE SERVICES */}
+										<div className="border-l border-white/[0.06] pl-5">
+											<div className="mb-3 border-b border-white/[0.07] pb-2.5">
+												<span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[#fae19c]">
+													STONE SERVICES
+												</span>
+											</div>
+											<ul className="space-y-1.5">
+												{stoneServicesList.map((item) => (
+													<li key={item.title}>
+														<a
+															href={item.href}
+															className="block text-[12.5px] font-normal text-slate-300 hover:text-[#fae19c] transition-colors py-0.5 whitespace-nowrap"
+														>
+															{item.title}
+														</a>
+													</li>
+												))}
+											</ul>
+										</div>
+
+										{/* Column 5: INSPECTION */}
+										<div className="border-l border-white/[0.06] pl-5">
+											<div className="mb-3 border-b border-white/[0.07] pb-2.5">
+												<span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[#fae19c]">
+													INSPECTION
+												</span>
+											</div>
+											<ul className="space-y-1.5">
+												{inspectionServicesList.map((item) => (
+													<li key={item.title}>
+														<a
+															href={item.href}
+															className="block text-[12.5px] font-normal text-slate-300 hover:text-[#fae19c] transition-colors py-0.5 whitespace-nowrap"
+														>
+															{item.title}
+														</a>
+													</li>
+												))}
+											</ul>
+										</div>
 									</div>
 
-									<div className="grid grid-cols-2 gap-x-8 gap-y-1.5">
-										<ul className="space-y-1">
-											{jewelleryServicesCol1.map((item, i) => (
-												<li key={i}>
-													<TextListItem {...item} />
-												</li>
-											))}
-										</ul>
-										<ul className="space-y-1">
-											{jewelleryServicesCol2.map((item, i) => (
-												<li key={i}>
-													<TextListItem {...item} />
-												</li>
-											))}
-										</ul>
-									</div>
-
-									<div className="mt-5 flex items-center justify-between border-t border-white/[0.08] pt-3 text-[11px]">
-										<span className="text-slate-400">
-											Armored doorstep intake & 4K video weighing verification
+									{/* Bottom Bar: → View All Jewellery Services */}
+									<div className="mt-6 flex items-center justify-between border-t border-white/[0.07] pt-4">
+										<span className="text-[11px] text-slate-400 font-light">
+											Calibrated assay diagnostics & master goldsmith bench repairs
 										</span>
 										<a
-											href="#services"
-											className="font-semibold tracking-[0.1em] uppercase text-[#fae19c] hover:underline"
+											href="#all-services"
+											className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#fae19c] hover:underline"
 										>
-											Book Repair Service &rarr;
+											<span>&rarr; View All Jewellery Services</span>
 										</a>
 									</div>
 								</div>
@@ -236,7 +353,7 @@ export function Header() {
 						<span className="absolute -bottom-1 left-0 h-[1.5px] w-full bg-[#fae19c] opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100 transition-all duration-200" />
 					</a>
 
-					{/* ITEM 4: CONSULTATION (Dropdown) */}
+					{/* ITEM 4: CONSULTATION (Dropdown - Clean Centered) */}
 					<div
 						className="relative flex-shrink-0"
 						onMouseEnter={() => handleMouseEnter('consultation')}
@@ -256,9 +373,7 @@ export function Header() {
 								<span
 									className={cn(
 										'absolute -bottom-1 left-0 h-[1.5px] w-full bg-[#fae19c] transition-all duration-200',
-										activeDropdown === 'consultation'
-											? 'opacity-100 scale-x-100'
-											: 'opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100'
+										activeDropdown === 'consultation' ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100'
 									)}
 								/>
 							</span>
@@ -270,31 +385,73 @@ export function Header() {
 							/>
 						</button>
 
-						{/* Dropdown Box: Anchored right below CONSULTATION */}
+						{/* CONSULTATION Dropdown: Dual-Card Prominent Layout */}
 						{activeDropdown === 'consultation' && (
-							<div className="absolute top-full left-0 pt-3 z-50 animate-in fade-in-50 zoom-in-98 duration-150">
-								<div className="w-[340px] rounded-xl border border-white/[0.1] bg-[#0c0d14]/98 p-5 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-2xl">
-									<div className="mb-3 border-b border-white/[0.08] pb-2">
-										<span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#fae19c]">
-											Private Concierge Appointments
-										</span>
+							<div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50 animate-in fade-in-50 zoom-in-98 duration-150">
+								<div className="w-[460px] rounded-2xl border border-white/[0.09] bg-[#0c0d14]/98 p-5 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-2xl">
+									{/* Top: 2 Prominent Cards (ONLINE & IN-PERSON) */}
+									<div className="grid grid-cols-2 gap-3.5">
+										{/* Card 1: ONLINE */}
+										<a
+											href="#consultation-online"
+											className="group flex flex-col justify-between rounded-xl border border-white/[0.08] bg-white/[0.02] p-4 transition-all duration-200 hover:border-[#fae19c]/40 hover:bg-white/[0.05]"
+										>
+											<div>
+												<span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#fae19c] block mb-1.5">
+													ONLINE
+												</span>
+												<p className="text-[12px] text-slate-300 font-light leading-relaxed">
+													Talk to a jewellery expert from anywhere.
+												</p>
+											</div>
+											<div className="mt-4 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white group-hover:text-[#fae19c] transition-colors">
+												<span>Book Online</span>
+												<span className="transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
+											</div>
+										</a>
+
+										{/* Card 2: IN-PERSON */}
+										<a
+											href="#consultation-in-person"
+											className="group flex flex-col justify-between rounded-xl border border-white/[0.08] bg-white/[0.02] p-4 transition-all duration-200 hover:border-[#fae19c]/40 hover:bg-white/[0.05]"
+										>
+											<div>
+												<span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#fae19c] block mb-1.5">
+													IN-PERSON
+												</span>
+												<p className="text-[12px] text-slate-300 font-light leading-relaxed">
+													Meet a verified goldsmith in person.
+												</p>
+											</div>
+											<div className="mt-4 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white group-hover:text-[#fae19c] transition-colors">
+												<span>Find &amp; Book</span>
+												<span className="transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
+											</div>
+										</a>
 									</div>
 
-									<ul className="space-y-1">
-										{consultationOptions.map((item, i) => (
-											<li key={i}>
-												<TextListItem {...item} />
-											</li>
-										))}
-									</ul>
-
-									<div className="mt-4 border-t border-white/[0.08] pt-3 text-center">
-										<span className="text-[11px] text-slate-400">
-											Private Line:{' '}
-											<a href="tel:+918041234567" className="font-semibold text-[#fae19c] hover:underline">
-												+91 80 4123 4567
-											</a>
-										</span>
+									{/* Bottom Utility Row: My Appointments & Find a Specialist */}
+									<div className="mt-3.5 flex items-center justify-between border-t border-white/[0.07] pt-3 px-1 text-[11px]">
+										<a
+											href="#my-appointments"
+											className="text-slate-400 hover:text-white transition-colors"
+										>
+											My Appointments
+										</a>
+										<span className="text-slate-600">&bull;</span>
+										<a
+											href="#consultation-history"
+											className="text-slate-400 hover:text-white transition-colors"
+										>
+											Consultation History
+										</a>
+										<span className="text-slate-600">&bull;</span>
+										<a
+											href="#find-specialist"
+											className="text-slate-400 hover:text-white transition-colors"
+										>
+											Find a Specialist
+										</a>
 									</div>
 								</div>
 							</div>
@@ -311,7 +468,7 @@ export function Header() {
 					</a>
 				</div>
 
-				{/* ---------------- 3. RIGHT ACTION: ONLY SIGN IN (Book Appointment Removed) ---------------- */}
+				{/* ---------------- 3. RIGHT ACTION: ONLY SIGN IN ---------------- */}
 				<div className="hidden lg:flex items-center flex-shrink-0">
 					<button className="h-10 rounded-full border border-white/15 px-6 text-[11px] font-semibold tracking-[0.14em] uppercase text-white transition-all hover:border-white/40 hover:bg-white/[0.04] cursor-pointer">
 						Sign In
@@ -337,25 +494,162 @@ export function Header() {
 				<div className="flex w-full flex-col gap-y-6">
 					{/* SHOP Mobile */}
 					<div>
-						<div className="mb-2 border-b border-white/[0.08] pb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#fae19c]">
+						<div className="mb-3 border-b border-white/[0.08] pb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#fae19c]">
 							SHOP
 						</div>
-						<div className="space-y-1">
-							{shopCategoriesCol1.concat(shopCategoriesCol2).map((link) => (
-								<TextListItem key={link.title} {...link} onClick={() => setOpen(false)} />
-							))}
+						<div className="mb-2 pl-2">
+							<span className="text-[10px] font-semibold tracking-[0.16em] uppercase text-slate-400 block mb-1">
+								JEWELLERY
+							</span>
+							<div className="grid grid-cols-2 gap-1">
+								{jewelleryCol1.concat(jewelleryCol2).map((link) => (
+									<a
+										key={link.title}
+										href={link.href}
+										onClick={() => setOpen(false)}
+										className="text-[12px] text-slate-300 py-1 hover:text-white"
+									>
+										{link.title}
+									</a>
+								))}
+							</div>
+						</div>
+						<div className="mb-2 pl-2 border-t border-white/[0.04] pt-2">
+							<span className="text-[10px] font-semibold tracking-[0.16em] uppercase text-slate-400 block mb-1">
+								COLLECTIONS
+							</span>
+							<div className="grid grid-cols-2 gap-1">
+								{collectionsList.map((link) => (
+									<a
+										key={link.title}
+										href={link.href}
+										onClick={() => setOpen(false)}
+										className="text-[12px] text-slate-300 py-1 hover:text-white"
+									>
+										{link.title}
+									</a>
+								))}
+							</div>
+						</div>
+						<div className="pl-2 border-t border-white/[0.04] pt-2">
+							<span className="text-[10px] font-semibold tracking-[0.16em] uppercase text-slate-400 block mb-1">
+								SHOP BY
+							</span>
+							<div className="grid grid-cols-2 gap-1">
+								{shopByList.map((link) => (
+									<a
+										key={link.title}
+										href={link.href}
+										onClick={() => setOpen(false)}
+										className="text-[12px] text-slate-300 py-1 hover:text-white"
+									>
+										{link.title}
+									</a>
+								))}
+							</div>
 						</div>
 					</div>
 
 					{/* JEWELLERY SERVICES Mobile */}
 					<div>
-						<div className="mb-2 border-b border-white/[0.08] pb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#fae19c]">
+						<div className="mb-3 border-b border-white/[0.08] pb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#fae19c]">
 							JEWELLERY SERVICES
 						</div>
-						<div className="space-y-1">
-							{jewelleryServicesCol1.concat(jewelleryServicesCol2).map((link) => (
-								<TextListItem key={link.title} {...link} onClick={() => setOpen(false)} />
-							))}
+						<div className="space-y-3 pl-2">
+							<div>
+								<span className="text-[10px] font-semibold tracking-[0.16em] uppercase text-slate-400 block mb-1">
+									REPAIR
+								</span>
+								<div className="grid grid-cols-2 gap-1">
+									{repairServicesList.map((link) => (
+										<a
+											key={link.title}
+											href={link.href}
+											onClick={() => setOpen(false)}
+											className="text-[12px] text-slate-300 py-0.5 hover:text-white"
+										>
+											{link.title}
+										</a>
+									))}
+								</div>
+							</div>
+							<div className="border-t border-white/[0.04] pt-2">
+								<span className="text-[10px] font-semibold tracking-[0.16em] uppercase text-slate-400 block mb-1">
+									CARE & RESTORATION
+								</span>
+								<div className="grid grid-cols-2 gap-1">
+									{careRestorationList.map((link) => (
+										<a
+											key={link.title}
+											href={link.href}
+											onClick={() => setOpen(false)}
+											className="text-[12px] text-slate-300 py-0.5 hover:text-white"
+										>
+											{link.title}
+										</a>
+									))}
+								</div>
+							</div>
+							<div className="border-t border-white/[0.04] pt-2">
+								<span className="text-[10px] font-semibold tracking-[0.16em] uppercase text-slate-400 block mb-1">
+									RESIZING & MODIFICATION
+								</span>
+								<div className="grid grid-cols-2 gap-1">
+									{resizingModificationList.map((link) => (
+										<a
+											key={link.title}
+											href={link.href}
+											onClick={() => setOpen(false)}
+											className="text-[12px] text-slate-300 py-0.5 hover:text-white"
+										>
+											{link.title}
+										</a>
+									))}
+								</div>
+							</div>
+							<div className="border-t border-white/[0.04] pt-2">
+								<span className="text-[10px] font-semibold tracking-[0.16em] uppercase text-slate-400 block mb-1">
+									STONE SERVICES
+								</span>
+								<div className="grid grid-cols-2 gap-1">
+									{stoneServicesList.map((link) => (
+										<a
+											key={link.title}
+											href={link.href}
+											onClick={() => setOpen(false)}
+											className="text-[12px] text-slate-300 py-0.5 hover:text-white"
+										>
+											{link.title}
+										</a>
+									))}
+								</div>
+							</div>
+							<div className="border-t border-white/[0.04] pt-2">
+								<span className="text-[10px] font-semibold tracking-[0.16em] uppercase text-slate-400 block mb-1">
+									INSPECTION
+								</span>
+								<div className="grid grid-cols-2 gap-1">
+									{inspectionServicesList.map((link) => (
+										<a
+											key={link.title}
+											href={link.href}
+											onClick={() => setOpen(false)}
+											className="text-[12px] text-slate-300 py-0.5 hover:text-white"
+										>
+											{link.title}
+										</a>
+									))}
+								</div>
+							</div>
+						</div>
+						<div className="mt-3 border-t border-white/[0.08] pt-2 pl-2">
+							<a
+								href="#all-services"
+								onClick={() => setOpen(false)}
+								className="text-xs font-semibold tracking-[0.14em] uppercase text-[#fae19c]"
+							>
+								&rarr; View All Jewellery Services
+							</a>
 						</div>
 					</div>
 
@@ -371,13 +665,49 @@ export function Header() {
 
 					{/* CONSULTATION Mobile */}
 					<div>
-						<div className="mb-2 border-b border-white/[0.08] pb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#fae19c]">
+						<div className="mb-2.5 border-b border-white/[0.08] pb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#fae19c]">
 							CONSULTATION
 						</div>
-						<div className="space-y-1">
-							{consultationOptions.map((link) => (
-								<TextListItem key={link.title} {...link} onClick={() => setOpen(false)} />
-							))}
+						<div className="grid grid-cols-2 gap-2 mb-2">
+							<a
+								href="#consultation-online"
+								onClick={() => setOpen(false)}
+								className="rounded-xl border border-white/10 p-3 bg-white/[0.02]"
+							>
+								<span className="text-[11px] font-bold tracking-[0.16em] uppercase text-[#fae19c] block mb-1">
+									ONLINE
+								</span>
+								<span className="text-[11px] text-slate-300 block mb-2 leading-snug">
+									Talk to an expert from anywhere.
+								</span>
+								<span className="text-[10px] font-semibold text-white uppercase">&rarr; Book Online</span>
+							</a>
+							<a
+								href="#consultation-in-person"
+								onClick={() => setOpen(false)}
+								className="rounded-xl border border-white/10 p-3 bg-white/[0.02]"
+							>
+								<span className="text-[11px] font-bold tracking-[0.16em] uppercase text-[#fae19c] block mb-1">
+									IN-PERSON
+								</span>
+								<span className="text-[11px] text-slate-300 block mb-2 leading-snug">
+									Meet a verified goldsmith in person.
+								</span>
+								<span className="text-[10px] font-semibold text-white uppercase">&rarr; Find &amp; Book</span>
+							</a>
+						</div>
+						<div className="flex items-center justify-between text-[11px] text-slate-400 px-1 py-1">
+							<a href="#my-appointments" onClick={() => setOpen(false)} className="hover:text-white">
+								My Appointments
+							</a>
+							<span className="text-slate-600">&bull;</span>
+							<a href="#consultation-history" onClick={() => setOpen(false)} className="hover:text-white">
+								Consultation History
+							</a>
+							<span className="text-slate-600">&bull;</span>
+							<a href="#find-specialist" onClick={() => setOpen(false)} className="hover:text-white">
+								Find a Specialist
+							</a>
 						</div>
 					</div>
 
@@ -434,115 +764,94 @@ function MobileMenu({ open, children, className, ...props }: MobileMenuProps) {
 	);
 }
 
-/* ---------------- Text-Only List Item (Clean Luxury Typography) ---------------- */
-function TextListItem({
-	title,
-	description,
-	className,
-	href,
-	onClick,
-}: SimpleLinkItem & { className?: string; onClick?: () => void }) {
-	return (
-		<a
-			href={href}
-			onClick={onClick}
-			className={cn(
-				'group flex flex-col gap-0.5 rounded-lg p-2.5 transition-colors hover:bg-white/[0.04]',
-				className
-			)}
-		>
-			<span className="text-[13px] font-medium text-slate-100 group-hover:text-[#fae19c] transition-colors tracking-wide">
-				{title}
-			</span>
-			{description && (
-				<span className="text-[11px] text-slate-400 font-light leading-relaxed">
-					{description}
-				</span>
-			)}
-		</a>
-	);
-}
-
 /* ========================================================
-   CURATED SPECIFICATIONS (CLEAN, PRECISE & REFINED)
+   DATA SPECIFICATIONS FOR SHOP & JEWELLERY SERVICES
    ======================================================== */
 
-// 1. SHOP Mega Menu Collections
-const shopCategoriesCol1: SimpleLinkItem[] = [
-	{
-		title: 'Necklaces & Chokers',
-		href: '#necklaces',
-		description: 'Antique temple chokers, bridal haars & kasu malas',
-	},
-	{
-		title: 'Earrings & Jhumkas',
-		href: '#earrings',
-		description: 'Handcrafted Chandbalis, studs & traditional drops',
-	},
-	{
-		title: 'Rings & Solitaires',
-		href: '#rings',
-		description: 'IGI certified diamond solitaires & royal signets',
-	},
-	{
-		title: 'Bangles & Kadas',
-		href: '#bangles',
-		description: 'Solid gold temple nakshi & filigree bangles',
-	},
+// SHOP DATA
+const jewelleryCol1 = [
+	{ title: 'Rings', href: '#rings' },
+	{ title: 'Necklaces', href: '#necklaces' },
+	{ title: 'Chains', href: '#chains' },
+	{ title: 'Bangles', href: '#bangles' },
+	{ title: 'Bracelets', href: '#bracelets' },
+	{ title: 'Earrings', href: '#earrings' },
+	{ title: 'Pendants', href: '#pendants' },
 ];
 
-const shopCategoriesCol2: SimpleLinkItem[] = [
-	{
-		title: 'Polki Diamond Suites',
-		href: '#polki',
-		description: 'Uncut syndicate diamonds with pure 24K Jadau setting',
-	},
-	{
-		title: 'Mangalsutras',
-		href: '#mangalsutras',
-		description: 'Sacred heirloom black-bead motifs in 22K gold',
-	},
-	{
-		title: 'Solid Gold Chains',
-		href: '#chains',
-		description: 'Rope, box, cuban & traditional artisan link styles',
-	},
-	{
-		title: 'Bullion & Fine Silver',
-		href: '#bullion',
-		description: '999 fine silver artifacts & 24K gold investment coins',
-	},
+const jewelleryCol2 = [
+	{ title: 'Mangalsutra', href: '#mangalsutra' },
+	{ title: 'Nose Jewellery', href: '#nose-jewellery' },
+	{ title: 'Anklets', href: '#anklets' },
+	{ title: 'Toe Rings', href: '#toe-rings' },
+	{ title: 'Hair Jewellery', href: '#hair-jewellery' },
+	{ title: 'Jewellery Sets', href: '#jewellery-sets' },
 ];
 
-// 2. JEWELLERY SERVICES Mega Menu
-const jewelleryServicesCol1: SimpleLinkItem[] = [
-	{
-		title: 'Jewellery Hospital & Repairs',
-		href: '#repairs',
-		description: '18 services: Precision ring resizing, laser soldering & resets',
-	},
-	{
-		title: 'Gold Exchange & Karatmeter',
-		href: '#gold-exchange',
-		description: 'Live spot rate valuation & zero-deduction purity exchange',
-	},
+const collectionsList = [
+	{ title: 'New Arrivals', href: '#new-arrivals' },
+	{ title: 'Trending', href: '#trending' },
+	{ title: 'Bridal', href: '#bridal' },
+	{ title: 'Daily Wear', href: '#daily-wear' },
+	{ title: 'Traditional', href: '#traditional' },
+	{ title: 'Contemporary', href: '#contemporary' },
+	{ title: 'Designer', href: '#designer' },
 ];
 
-const jewelleryServicesCol2: SimpleLinkItem[] = [
-	{
-		title: 'Ultrasonic Spa & Polish',
-		href: '#spa',
-		description: 'Ultrasonic steam cleaning, rhodium flash & claw audit',
-	},
-	{
-		title: 'BIS Hallmark & HUID Provenance',
-		href: '#hallmark',
-		description: 'Government 6-digit laser assay certification lookup',
-	},
+const shopByList = [
+	{ title: 'Handmade', href: '#handmade' },
+	{ title: 'Handcrafted', href: '#handcrafted' },
+	{ title: 'Lightweight', href: '#lightweight' },
+	{ title: 'Custom Made', href: '#custom-made' },
+	{ title: 'Gold Jewellery', href: '#gold-jewellery' },
 ];
 
-// 4. CONSULTATION Dropdown Options
-const consultationOptions: SimpleLinkItem[] = [
+// JEWELLERY SERVICES DATA
+const repairServicesList = [
+	{ title: 'Ring Repair', href: '#ring-repair' },
+	{ title: 'Chain Repair', href: '#chain-repair' },
+	{ title: 'Necklace Repair', href: '#necklace-repair' },
+	{ title: 'Bangle Repair', href: '#bangle-repair' },
+	{ title: 'Bracelet Repair', href: '#bracelet-repair' },
+	{ title: 'Earring Repair', href: '#earring-repair' },
+	{ title: 'Other Jewellery Repair', href: '#other-jewellery-repair' },
+];
+
+const careRestorationList = [
+	{ title: 'Cleaning', href: '#cleaning' },
+	{ title: 'Polishing', href: '#polishing' },
+	{ title: 'Restoration', href: '#restoration' },
+	{ title: 'Antique Restoration', href: '#antique-restoration' },
+	{ title: 'Jewellery Maintenance', href: '#jewellery-maintenance' },
+];
+
+const resizingModificationList = [
+	{ title: 'Ring Resizing', href: '#ring-resizing' },
+	{ title: 'Bangle Size Adjustment', href: '#bangle-size-adjustment' },
+	{ title: 'Chain Length Adjustment', href: '#chain-length-adjustment' },
+	{ title: 'Necklace Length Adjustment', href: '#necklace-length-adjustment' },
+	{ title: 'Design Modification', href: '#design-modification' },
+	{ title: 'Jewellery Conversion', href: '#jewellery-conversion' },
+];
+
+const stoneServicesList = [
+	{ title: 'Stone Replacement', href: '#stone-replacement' },
+	{ title: 'Stone Setting', href: '#stone-setting' },
+	{ title: 'Stone Resetting', href: '#stone-resetting' },
+	{ title: 'Loose Stone Repair', href: '#loose-stone-repair' },
+	{ title: 'Missing Stone Replacement', href: '#missing-stone-replacement' },
+	{ title: 'Stone Inspection', href: '#stone-inspection' },
+];
+
+const inspectionServicesList = [
+	{ title: 'Jewellery Inspection', href: '#jewellery-inspection' },
+	{ title: 'Damage Assessment', href: '#damage-assessment' },
+	{ title: 'Repair Assessment', href: '#repair-assessment' },
+	{ title: "I Don't Know What's Wrong", href: '#diagnostic-intake' },
+];
+
+// CONSULTATION DATA
+const consultationOptions = [
 	{
 		title: 'Private VIP Salon Visit',
 		href: '#consultation-salon',
