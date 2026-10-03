@@ -41,8 +41,8 @@ export const CHAPTERS: ChapterMeta[] = [
 	{
 		id: '05-your-version',
 		number: '05',
-		title: 'Your Configuration',
-		subtitle: 'Ready to co-create with the atelier',
+		title: 'Your Ideology, Our Craft',
+		subtitle: 'Have an idea? Specially designed for you with your ideology',
 		range: [0.38, 0.48],
 	},
 	{

@@ -7,6 +7,7 @@ import { JewelleryAsset } from './components/JewelleryAsset';
 import { MakeItYoursPanel } from './components/MakeItYoursPanel';
 import { EventNode, MilestoneDrawer } from './components/EventNode';
 import { ActionRouter } from './components/ActionRouter';
+import { BespokeIdeaPortal } from './components/BespokeIdeaPortal';
 import { ChevronDown, Sparkles, Scale, ShieldCheck, Video, MapPin, Check } from 'lucide-react';
 
 // Continuous smooth cross-fade interpolation for buttery cinematic chapter transitions
@@ -237,66 +238,34 @@ export function LifeOfAJewel() {
 						</div>
 					</div>
 
-					{/* ================= CHAPTER 05: YOUR CONFIGURATION (PEDESTAL & SUMMARY) ================= */}
+					{/* ================= CHAPTER 05: HAVE AN IDEA? YOUR IDEOLOGY, OUR CRAFT ================= */}
 					<div
-						className="absolute inset-0 size-full flex items-center justify-center"
+						className="absolute inset-0 size-full flex items-center justify-center overflow-y-auto py-8"
 						style={getChapterTransitionStyle(progress, CHAPTERS[4].range)}
 					>
-						<div className="grid grid-cols-1 lg:grid-cols-12 w-full max-w-4xl items-center gap-8 px-4">
-							<div className="lg:col-span-6 flex justify-center">
+						<div className="grid grid-cols-1 lg:grid-cols-12 w-full max-w-5xl items-center gap-6 lg:gap-8 px-4">
+							{/* Left: Photorealistic Visual Inspiration */}
+							<div className="lg:col-span-5 hidden lg:flex flex-col items-center justify-center text-center space-y-4">
 								<JewelleryAsset
 									configuration={configuration}
 									progress={progress}
 									isExploded={false}
 								/>
+								<div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-center backdrop-blur-md">
+									<span className="text-[10px] font-mono uppercase tracking-widest text-[#fae19c] block">
+										Ideology Meets Craft
+									</span>
+									<span className="text-xs text-neutral-300 font-serif">
+										&ldquo;Every custom ornament carries a soul.&rdquo;
+									</span>
+								</div>
 							</div>
 
-							<div className="lg:col-span-6 space-y-4 rounded-2xl border border-[#fae19c]/30 bg-[#0e0f17]/90 p-6 backdrop-blur-xl shadow-2xl">
-								<div className="flex items-center justify-between border-b border-white/10 pb-3">
-									<span className="text-[10px] font-mono uppercase tracking-widest text-[#fae19c]">
-										05 • Configured Heirloom
-									</span>
-									<span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] font-mono text-neutral-300">
-										{configuration.baseDesignId}
-									</span>
-								</div>
-
-								<div>
-									<h3 className="font-serif text-xl font-semibold text-white">
-										{configuration.baseDesignName}
-									</h3>
-									<p className="text-xs text-neutral-400 font-light mt-1">
-										Configured with your bespoke parameters and registered to your atelier session.
-									</p>
-								</div>
-
-								<div className="grid grid-cols-2 gap-2 text-xs">
-									<div className="rounded-xl border border-white/5 bg-white/[0.02] p-2.5">
-										<span className="text-neutral-500 block text-[9px] uppercase font-mono">Metal Purity</span>
-										<span className="font-medium text-white">{configuration.metal.purity} {configuration.metal.tone}</span>
-									</div>
-									<div className="rounded-xl border border-white/5 bg-white/[0.02] p-2.5">
-										<span className="text-neutral-500 block text-[9px] uppercase font-mono">Approx. Weight</span>
-										<span className="font-medium text-white">~{configuration.approxWeight.toFixed(1)} g</span>
-									</div>
-									<div className="rounded-xl border border-white/5 bg-white/[0.02] p-2.5">
-										<span className="text-neutral-500 block text-[9px] uppercase font-mono">Center Stone</span>
-										<span className="font-medium text-white">{configuration.stone.type}</span>
-									</div>
-									<div className="rounded-xl border border-white/5 bg-white/[0.02] p-2.5">
-										<span className="text-neutral-500 block text-[9px] uppercase font-mono">Estimated Range</span>
-										<span className="font-serif font-bold text-[#fae19c]">₹{configuration.budget.min.toLocaleString('en-IN')} – ₹{configuration.budget.max.toLocaleString('en-IN')}</span>
-									</div>
-								</div>
-
-								<div className="pt-2 space-y-2">
-									<button
-										onClick={() => setActiveModal('quote')}
-										className="w-full rounded-xl bg-gradient-to-r from-[#fae19c] to-[#d4af37] py-3 text-xs font-bold uppercase tracking-wider text-black hover:brightness-105 cursor-pointer shadow-md"
-									>
-										Request Atelier Quote →
-									</button>
-								</div>
+							{/* Right: Bespoke Multi-Format Submission Portal */}
+							<div className="lg:col-span-7 flex justify-center w-full">
+								<BespokeIdeaPortal
+									onSubmitIdea={() => setActiveModal('bespoke')}
+								/>
 							</div>
 						</div>
 					</div>
@@ -577,6 +546,7 @@ export function LifeOfAJewel() {
 							<span>Atelier Workflow</span>
 						</div>
 						<h3 className="font-serif text-xl font-semibold text-white">
+							{activeModal === 'bespoke' && 'Your Ideology Has Been Entrusted to the Karigar'}
 							{activeModal === 'quote' && 'Request Atelier Quote'}
 							{activeModal === 'saved' && 'Design Saved to Vault'}
 							{activeModal === 'consultation' && 'Book Private Consultation'}
@@ -586,6 +556,8 @@ export function LifeOfAJewel() {
 							{activeModal === 'repair' && 'Heirloom Care & Restoration'}
 						</h3>
 						<p className="text-xs text-neutral-300 font-light leading-relaxed">
+							{activeModal === 'bespoke' &&
+								`Your idea and custom specifications have been received by Vishwakarma Master Karigars. When your ideology meets our master craftsmanship, a 1-of-1 heirloom is born. Our CAD specialist will reach out within 24 hours with an initial render and metallurgical feasibility breakdown.`}
 							{activeModal === 'quote' &&
 								`Your customized configuration (${configuration.metal.purity} ${configuration.metal.tone}, ~${configuration.approxWeight}g, ${configuration.stone.type}) has been logged. Our master jeweler will review CAD feasibility and connect with you.`}
 							{activeModal === 'saved' &&
