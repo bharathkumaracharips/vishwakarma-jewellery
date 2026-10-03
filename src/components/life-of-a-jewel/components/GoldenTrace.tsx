@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { CHAPTERS } from '../state/useJewelleryJourney';
 
 interface GoldenTraceProps {
 	progress: number; // 0.0 to 1.0
@@ -8,60 +9,68 @@ interface GoldenTraceProps {
 }
 
 export function GoldenTrace({ progress, className = '' }: GoldenTraceProps) {
-	// A continuous smooth organic curve flowing from top to bottom
-	const pathLength = 1200;
-	const strokeDashoffset = pathLength * (1 - Math.min(Math.max(progress, 0.02), 1));
+	// Active chapter index
+	const activeIndex = Math.min(
+		Math.floor(progress * CHAPTERS.length),
+		CHAPTERS.length - 1
+	);
 
 	return (
 		<div
-			className={`pointer-events-none fixed inset-0 z-10 flex items-center justify-center overflow-hidden opacity-85 transition-opacity duration-300 ${className}`}
+			className={`pointer-events-none fixed left-4 sm:left-8 lg:left-12 top-28 bottom-20 z-10 hidden md:flex flex-col items-center justify-between opacity-80 ${className}`}
 		>
-			<svg
-				className="h-full w-full max-w-5xl"
-				viewBox="0 0 400 1200"
-				fill="none"
-				preserveAspectRatio="xMidYMid meet"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<defs>
-					{/* Glowing Linear Gradient for the trace */}
-					<linearGradient id="goldenTraceGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-						<stop offset="0%" stopColor="#fae19c" stopOpacity="0.9" />
-						<stop offset="35%" stopColor="#d4af37" stopOpacity="1" />
-						<stop offset="70%" stopColor="#c59b27" stopOpacity="0.95" />
-						<stop offset="100%" stopColor="#fae19c" stopOpacity="0.8" />
-					</linearGradient>
+			{/* Vertical Ambient Background Guide Line */}
+			<div className="absolute top-0 bottom-0 w-[1.5px] bg-white/[0.08]" />
 
-					{/* Radial Glow Filter */}
-					<filter id="traceBloom" x="-30%" y="-30%" width="160%" height="160%">
-						<feGaussianBlur stdDeviation="3.5" result="blur" />
-						<feMerge>
-							<feMergeNode in="blur" />
-							<feMergeNode in="SourceGraphic" />
-						</feMerge>
-					</filter>
-				</defs>
+			{/* Active Golden Progress Thread */}
+			<div
+				className="absolute top-0 w-[2px] bg-gradient-to-b from-[#fae19c] via-[#d4af37] to-[#fae19c] shadow-[0_0_12px_rgba(250,225,156,0.8)] transition-all duration-150 ease-out"
+				style={{
+					height: `${Math.min(Math.max(progress * 100, 2), 100)}%`,
+				}}
+			/>
 
-				{/* Faint Guide Trail */}
-				<path
-					d="M200 20 C 180 150, 220 280, 200 400 C 170 540, 230 680, 200 800 C 185 920, 215 1060, 200 1180"
-					stroke="rgba(212, 175, 55, 0.12)"
-					strokeWidth="1.5"
-					strokeDasharray="4 6"
-				/>
+			{/* Discrete Milestone Nodes along the Journey Rail */}
+			{CHAPTERS.map((ch, idx) => {
+				const isPassed = idx <= activeIndex;
+				const isCurrent = idx === activeIndex;
 
-				{/* Active Golden Trace Path */}
-				<path
-					d="M200 20 C 180 150, 220 280, 200 400 C 170 540, 230 680, 200 800 C 185 920, 215 1060, 200 1180"
-					stroke="url(#goldenTraceGlow)"
-					strokeWidth="2.5"
-					strokeLinecap="round"
-					filter="url(#traceBloom)"
-					strokeDasharray={pathLength}
-					strokeDashoffset={strokeDashoffset}
-					className="transition-[stroke-dashoffset] duration-150 ease-out"
-				/>
-			</svg>
+				return (
+					<div
+						key={ch.id}
+						className="relative z-10 flex items-center group pointer-events-auto cursor-pointer"
+						onClick={() => {
+							const el = document.querySelector('section');
+							if (el) {
+								const targetTop = el.offsetTop + el.scrollHeight * ch.range[0];
+								window.scrollTo({ top: targetTop, behavior: 'smooth' });
+							}
+						}}
+					>
+						{/* Glowing Milestone Bead */}
+						<div
+							className={`size-2.5 rounded-full border transition-all duration-300 ${
+								isCurrent
+									? 'scale-125 border-[#fae19c] bg-[#fae19c] shadow-[0_0_12px_#fae19c]'
+									: isPassed
+									? 'border-[#d4af37] bg-[#d4af37]/80'
+									: 'border-neutral-700 bg-neutral-900 opacity-40'
+							}`}
+						/>
+
+						{/* Hover/Active Chapter Label (Aligned to the right of the rail) */}
+						<div
+							className={`absolute left-6 whitespace-nowrap rounded-md px-2 py-0.5 text-[9px] font-mono uppercase tracking-widest transition-all duration-200 ${
+								isCurrent
+									? 'opacity-100 translate-x-0 bg-black/80 border border-[#fae19c]/40 text-[#fae19c]'
+									: 'opacity-0 -translate-x-1 group-hover:opacity-80 group-hover:translate-x-0 bg-black/60 text-neutral-400'
+							}`}
+						>
+							{ch.number} • {ch.title}
+						</div>
+					</div>
+				);
+			})}
 		</div>
 	);
 }

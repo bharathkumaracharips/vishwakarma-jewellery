@@ -16,192 +16,140 @@ export function JewelleryAsset({
 }: JewelleryAssetProps) {
 	const { metal, stone, approxWeight } = configuration;
 
-	// Rotation degree based on scroll progress
-	const rotateY = (progress * 360) % 360;
-	// Gentle vertical float
-	const floatOffset = Math.sin(progress * Math.PI * 8) * 8;
+	// Dynamic CSS filter based on metal selection for realistic material change
+	let metalFilter = 'brightness(1.02) contrast(1.08)';
+	let ambientGlow = 'rgba(232, 195, 90, 0.35)'; // Warm 22K Gold
 
-	// Exploded view layer offsets
-	const goldLayerOffset = isExploded ? -35 : 0;
-	const stoneLayerOffset = isExploded ? 45 : 0;
-	const settingLayerOffset = isExploded ? -10 : 0;
+	if (metal.tone === 'Rose Gold') {
+		metalFilter = 'brightness(1.04) contrast(1.1) hue-rotate(335deg) saturate(1.35)';
+		ambientGlow = 'rgba(229, 154, 132, 0.35)'; // Rose Gold
+	} else if (metal.tone === 'White Gold') {
+		metalFilter = 'brightness(1.12) contrast(1.15) grayscale(0.85) saturate(0.2)';
+		ambientGlow = 'rgba(230, 235, 250, 0.4)'; // Platinum / White Gold
+	} else if (metal.purity === '18K') {
+		metalFilter = 'brightness(1.03) contrast(1.08) saturate(1.1)';
+		ambientGlow = 'rgba(222, 185, 80, 0.3)';
+	}
+
+	// Gentle floating animation based on progress
+	const floatY = Math.sin(progress * Math.PI * 6) * 6;
+	const rotateZ = Math.sin(progress * Math.PI * 4) * 2;
 
 	return (
-		<div className="relative flex items-center justify-center pointer-events-none select-none">
-			{/* Ambient Radial Spotlight behind the Jewel */}
+		<div className="relative flex items-center justify-center select-none">
+			{/* Atmospheric Ambient Glow behind the Jewel */}
 			<div
-				className="absolute size-80 sm:size-96 rounded-full blur-3xl opacity-35 transition-colors duration-700 pointer-events-none"
+				className="absolute size-80 sm:size-96 rounded-full blur-3xl opacity-40 transition-all duration-700 pointer-events-none"
 				style={{
-					background: `radial-gradient(circle, ${metal.colorCode}44 0%, ${stone.colorHex}22 50%, transparent 70%)`,
+					background: `radial-gradient(circle, ${ambientGlow} 0%, ${stone.colorHex || '#f0f5ff'}22 45%, transparent 70%)`,
 				}}
 			/>
 
-			{/* Faint Concentric Alignment Rings (Sacred Geometry) */}
-			<div className="absolute size-72 sm:size-84 rounded-full border border-white/[0.06] animate-[spin_60s_linear_infinite]" />
-			<div className="absolute size-96 sm:size-[420px] rounded-full border border-white/[0.03] animate-[spin_90s_linear_infinite_reverse]" />
+			{/* Concentric Blueprint Rings for luxury technical presentation */}
+			<div className="absolute size-72 sm:size-84 rounded-full border border-white/[0.07] animate-[spin_80s_linear_infinite]" />
+			<div className="absolute size-96 sm:size-[430px] rounded-full border border-white/[0.04] animate-[spin_120s_linear_infinite_reverse]" />
 
-			{/* 3D Perspective Jewel Stage */}
+			{/* Main Photorealistic Jewel Container */}
 			<div
-				className="relative size-64 sm:size-80 flex items-center justify-center transition-transform duration-300 ease-out"
+				className="relative size-64 sm:size-80 lg:size-88 rounded-3xl overflow-hidden border border-white/10 bg-[#0e0f17] shadow-[0_20px_60px_rgba(0,0,0,0.9)] transition-all duration-500 ease-out"
 				style={{
-					transform: `translateY(${floatOffset}px) rotateY(${rotateY * 0.15}deg) scale(${1 + (approxWeight - 18.4) * 0.01})`,
-					perspective: '1000px',
+					transform: `translateY(${floatY}px) rotate(${rotateZ}deg) scale(${1 + (approxWeight - 18.4) * 0.012})`,
 				}}
 			>
-				{/* 1. SOLID GOLD CORE (Base Ornament) */}
-				<div
-					className="absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out"
+				{/* The Real High-Resolution Luxury Ornament Photograph */}
+				<img
+					src="/images/polki-choker.jpg"
+					alt={configuration.baseDesignName}
+					className="size-full object-cover object-center transition-all duration-700 pointer-events-none"
 					style={{
-						transform: `translateY(${goldLayerOffset}px)`,
+						filter: metalFilter,
 					}}
-				>
-					{/* SVG High-Fidelity Royal Choker Silhouette */}
-					<svg
-						className="size-full drop-shadow-[0_15px_35px_rgba(0,0,0,0.8)]"
-						viewBox="0 0 300 300"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<defs>
-							<linearGradient id="metalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-								<stop offset="0%" stopColor={metal.specularHighlight} />
-								<stop offset="30%" stopColor={metal.colorCode} />
-								<stop offset="70%" stopColor={metal.colorCode} stopOpacity="0.9" />
-								<stop offset="100%" stopColor="#4a3710" />
-							</linearGradient>
+				/>
 
-							<radialGradient id="goldShine" cx="50%" cy="30%" r="60%">
-								<stop offset="0%" stopColor={metal.specularHighlight} stopOpacity="0.9" />
-								<stop offset="60%" stopColor={metal.colorCode} stopOpacity="0.6" />
-								<stop offset="100%" stopColor="#2a1f0a" stopOpacity="0.9" />
-							</radialGradient>
-						</defs>
-
-						{/* Outer Royal Crescent Torque */}
-						<path
-							d="M 50 160 C 50 80, 250 80, 250 160 C 235 230, 65 230, 50 160 Z"
-							fill="url(#goldShine)"
-							stroke="url(#metalGradient)"
-							strokeWidth="4"
-						/>
-
-						{/* Articulated Filigree Flutes */}
-						<path
-							d="M 70 155 C 80 120, 220 120, 230 155 C 220 200, 80 200, 70 155 Z"
-							fill="#090a0f"
-							opacity="0.8"
-							stroke={metal.colorCode}
-							strokeWidth="1.5"
-						/>
-
-						{/* Traditional Beaded Fringe Beads */}
-						{[...Array(9)].map((_, i) => {
-							const angle = (i - 4) * 16;
-							const rad = (angle * Math.PI) / 180;
-							const cx = 150 + Math.sin(rad) * 88;
-							const cy = 185 + Math.cos(rad) * 35;
-							return (
-								<circle
-									key={i}
-									cx={cx}
-									cy={cy}
-									r="4.5"
-									fill="url(#metalGradient)"
-									stroke="#ffffff"
-									strokeWidth="0.5"
-								/>
-							);
-						})}
-					</svg>
-
-					{/* Layer Tag in Exploded View */}
-					{isExploded && (
-						<div className="absolute -left-12 top-6 rounded-md border border-[#fae19c]/40 bg-black/80 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-[#fae19c] backdrop-blur-md animate-in fade-in">
-							01 • {metal.purity} {metal.tone} Core
-						</div>
-					)}
-				</div>
-
-				{/* 2. GEMSTONE PRONG SETTING LAYER */}
+				{/* High-Luster Specular Sheen Overlay */}
 				<div
-					className="absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out"
+					className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-30 transition-opacity duration-500"
 					style={{
-						transform: `translateY(${settingLayerOffset}px)`,
+						background: 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%, rgba(0,0,0,0.6) 100%)',
 					}}
-				>
-					<svg
-						className="size-full"
-						viewBox="0 0 300 300"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						{/* Center Crown Collet Setting */}
-						<circle
-							cx="150"
-							cy="165"
-							r="24"
-							stroke={metal.colorCode}
-							strokeWidth="2.5"
-							fill="#0a0b10"
-							opacity="0.9"
-						/>
-						{/* 4 Micro Prongs */}
-						<circle cx="134" cy="149" r="2.5" fill={metal.specularHighlight} />
-						<circle cx="166" cy="149" r="2.5" fill={metal.specularHighlight} />
-						<circle cx="134" cy="181" r="2.5" fill={metal.specularHighlight} />
-						<circle cx="166" cy="181" r="2.5" fill={metal.specularHighlight} />
-					</svg>
+				/>
 
-					{isExploded && (
-						<div className="absolute -right-16 top-1/2 -translate-y-1/2 rounded-md border border-white/20 bg-black/80 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-slate-300 backdrop-blur-md animate-in fade-in">
-							02 • Articulated Prong Collet
-						</div>
-					)}
-				</div>
-
-				{/* 3. GEMSTONE LAYER (Responsive to Configurator) */}
+				{/* Dynamic Gemstone Flare (reflects chosen stone color) */}
 				{stone.type !== 'None' && (
-					<div
-						className="absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out"
-						style={{
-							transform: `translateY(${stoneLayerOffset}px)`,
-						}}
-					>
-						{/* Center Gemstone Visual with Facet Cuts */}
-						<div className="relative size-11 flex items-center justify-center">
-							{/* Glowing Faceted Gemstone Element */}
-							<div
-								className="size-9 rounded-full shadow-[0_0_25px_rgba(255,255,255,0.4)] border border-white/40 flex items-center justify-center overflow-hidden transition-all duration-500"
-								style={{
-									backgroundColor: stone.colorHex || '#f0f5ff',
-									boxShadow: `0 0 30px ${stone.colorHex}66, inset 0 0 10px rgba(255,255,255,0.8)`,
-								}}
-							>
-								{/* Gemstone Facet Lines */}
-								<svg className="size-full opacity-60" viewBox="0 0 36 36" fill="none">
-									<polygon points="18,4 32,18 18,32 4,18" stroke="#ffffff" strokeWidth="0.8" />
-									<line x1="4" y1="18" x2="32" y2="18" stroke="#ffffff" strokeWidth="0.6" />
-									<line x1="18" y1="4" x2="18" y2="32" stroke="#ffffff" strokeWidth="0.6" />
-								</svg>
-							</div>
-
-							{/* Diamond/Gemstone Specular Star Flare */}
-							<div className="absolute -top-1 -right-1 size-3.5 bg-white rounded-full blur-[1px] opacity-90 animate-pulse" />
-						</div>
-
-						{isExploded && (
-							<div className="absolute -left-16 bottom-12 rounded-md border border-white/20 bg-black/80 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-slate-300 backdrop-blur-md animate-in fade-in">
-								03 • {stone.carat || '1.2'}ct {stone.color} {stone.type}
-							</div>
-						)}
+					<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
+						<div
+							className="size-10 rounded-full blur-md opacity-60 transition-colors duration-500 animate-pulse"
+							style={{ backgroundColor: stone.colorHex || '#f0f5ff' }}
+						/>
+						{/* Sharp brilliance diamond star */}
+						<div className="size-2 rounded-full bg-white shadow-[0_0_12px_#ffffff]" />
 					</div>
 				)}
+
+				{/* Bottom subtle luxury watermark badge */}
+				<div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl bg-black/60 px-3 py-1.5 backdrop-blur-md border border-white/10 text-[10px] font-mono text-neutral-300">
+					<span className="font-semibold text-[#fae19c]">{metal.purity} {metal.tone}</span>
+					<span>~{approxWeight.toFixed(1)}g</span>
+					<span className="text-white">{stone.type}</span>
+				</div>
 			</div>
 
-			{/* Subtle Status Pill at Jewel Base */}
-			<div className="absolute -bottom-8 rounded-full border border-white/10 bg-black/60 px-3.5 py-1 text-[10px] font-mono tracking-widest uppercase text-neutral-400 backdrop-blur-md">
-				{configuration.baseDesignId} • {metal.purity} {metal.tone}
-			</div>
+			{/* ================= EXPLODED ANATOMY CALLOUTS (Chapter 02) ================= */}
+			{isExploded && (
+				<>
+					{/* Callout 1: 22K Solid Gold Core */}
+					<div className="absolute -top-6 -left-8 sm:-left-20 z-20 flex items-center gap-2 animate-in fade-in-50 slide-in-from-left duration-500">
+						<div className="rounded-xl border border-[#fae19c]/40 bg-black/85 px-3 py-1.5 text-left backdrop-blur-md shadow-xl">
+							<span className="block text-[9px] font-mono uppercase tracking-wider text-[#fae19c]">
+								01 • Solid Gold Foundation
+							</span>
+							<span className="text-xs font-semibold text-white">
+								Hand-hammered 22K Alloy
+							</span>
+						</div>
+						<div className="h-[1.5px] w-8 sm:w-14 bg-[#fae19c]/60" />
+					</div>
+
+					{/* Callout 2: Uncut Polki Diamonds / Center Gem */}
+					<div className="absolute -top-6 -right-8 sm:-right-20 z-20 flex items-center gap-2 animate-in fade-in-50 slide-in-from-right duration-500">
+						<div className="h-[1.5px] w-8 sm:w-14 bg-[#fae19c]/60" />
+						<div className="rounded-xl border border-white/20 bg-black/85 px-3 py-1.5 text-left backdrop-blur-md shadow-xl">
+							<span className="block text-[9px] font-mono uppercase tracking-wider text-neutral-400">
+								02 • Gemstone Pavé
+							</span>
+							<span className="text-xs font-semibold text-white">
+								Natural Uncut Polki & Collet
+							</span>
+						</div>
+					</div>
+
+					{/* Callout 3: Articulated Link Clasp */}
+					<div className="absolute -bottom-6 -left-8 sm:-left-20 z-20 flex items-center gap-2 animate-in fade-in-50 slide-in-from-left duration-500">
+						<div className="rounded-xl border border-white/20 bg-black/85 px-3 py-1.5 text-left backdrop-blur-md shadow-xl">
+							<span className="block text-[9px] font-mono uppercase tracking-wider text-neutral-400">
+								03 • Articulation
+							</span>
+							<span className="text-xs font-semibold text-white">
+								Flexible Silk Dori & Links
+							</span>
+						</div>
+						<div className="h-[1.5px] w-8 sm:w-14 bg-[#fae19c]/60" />
+					</div>
+
+					{/* Callout 4: Surface Hallmark Seal */}
+					<div className="absolute -bottom-6 -right-8 sm:-right-20 z-20 flex items-center gap-2 animate-in fade-in-50 slide-in-from-right duration-500">
+						<div className="h-[1.5px] w-8 sm:w-14 bg-[#fae19c]/60" />
+						<div className="rounded-xl border border-[#fae19c]/40 bg-black/85 px-3 py-1.5 text-left backdrop-blur-md shadow-xl">
+							<span className="block text-[9px] font-mono uppercase tracking-wider text-[#fae19c]">
+								04 • Provenance
+							</span>
+							<span className="text-xs font-semibold text-white">
+								BIS 916 Laser Hallmarked
+							</span>
+						</div>
+					</div>
+				</>
+			)}
 		</div>
 	);
 }
