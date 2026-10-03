@@ -5,9 +5,11 @@ import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { createPortal } from 'react-dom';
 import { ChevronDown } from 'lucide-react';
+import { AuthModal } from '@/components/ui/auth-modal';
 
 export function Header() {
 	const [open, setOpen] = useState(false);
+	const [isAuthOpen, setIsAuthOpen] = useState(false);
 	const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const scrolled = useScroll(10);
@@ -470,7 +472,10 @@ export function Header() {
 
 				{/* ---------------- 3. RIGHT ACTION: ONLY SIGN IN ---------------- */}
 				<div className="hidden lg:flex items-center flex-shrink-0">
-					<button className="h-10 rounded-full border border-white/15 px-6 text-[11px] font-semibold tracking-[0.14em] uppercase text-white transition-all hover:border-white/40 hover:bg-white/[0.04] cursor-pointer">
+					<button
+						onClick={() => setIsAuthOpen(true)}
+						className="h-10 rounded-full border border-white/15 px-6 text-[11px] font-semibold tracking-[0.14em] uppercase text-white transition-all hover:border-white/40 hover:bg-white/[0.04] cursor-pointer"
+					>
 						Sign In
 					</button>
 				</div>
@@ -724,11 +729,20 @@ export function Header() {
 
 				{/* Mobile Action: Only Sign In */}
 				<div className="mt-4 border-t border-white/[0.08] pt-4">
-					<button className="h-11 w-full rounded-full border border-white/20 text-[11px] font-semibold tracking-[0.14em] uppercase text-white">
+					<button
+						onClick={() => {
+							setOpen(false);
+							setIsAuthOpen(true);
+						}}
+						className="h-11 w-full rounded-full border border-white/20 text-[11px] font-semibold tracking-[0.14em] uppercase text-white cursor-pointer hover:bg-white/[0.04]"
+					>
 						Sign In
 					</button>
 				</div>
 			</MobileMenu>
+
+			{/* Auth Modal */}
+			<AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 		</header>
 	);
 }
