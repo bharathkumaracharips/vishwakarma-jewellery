@@ -10,15 +10,27 @@
     "backend:dev": "cargo run --manifest-path backend/Cargo.toml",
     "backend:build": "cargo build --release --manifest-path backend/Cargo.toml",
     "backend:start": "./backend/target/release/backend",
+    "images:test": ".venv/bin/python scripts/batch_processor.py --test 5",
+    "images:batch": ".venv/bin/python scripts/batch_processor.py --all",
+    "images:resume": ".venv/bin/python scripts/batch_processor.py --resume",
+    "catalog:build": ".venv/bin/python scripts/catalog_analyzer.py",
     "db:view": "mongosh \"mongodb://127.0.0.1:27017/vishwakarma_jewelers\" --quiet --eval 'console.log(\"=== USERS IN LOCAL MONGODB ===\"); printjson(db.users.find().toArray()); console.log(\"\\n=== ORNAMENT INTERACTION AUDIT ===\"); printjson(db.interactions.find().toArray());'",
     "db:shell": "mongosh \"mongodb://127.0.0.1:27017/vishwakarma_jewelers\""
   },
   "dependencies": {
+    "@radix-ui/react-navigation-menu": "^1.2.22",
+    "@radix-ui/react-slot": "^1.3.3",
+    "@tailwindcss/postcss": "^4.3.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "lucide-react": "^1.48.0",
     "motion": "^13.4.4",
     "next": "16.3.6",
+    "postcss": "^8.5.28",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@types/node": "^20",

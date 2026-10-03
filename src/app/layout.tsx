@@ -3,39 +3,22 @@ import { Cinzel, Montserrat } from "next/font/google";
 import "./globals.css";
 
 const cinzel = Cinzel({
-  variable: "--font-cinzel",
   subsets: ["latin"],
+  variable: "--font-cinzel",
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
 const montserrat = Montserrat({
-  variable: "--font-montserrat",
   subsets: ["latin"],
+  variable: "--font-montserrat",
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Vishwakarma Jewelers | Purveyors of Royal Heritage & High Fine Jewellery",
-  description:
-    "Discover handcrafted 22K gold, uncut Polki diamonds, antique temple bridal jewellery, and certified solitaires at Vishwakarma Jewelers. 100% BIS Hallmarked.",
-  keywords: [
-    "Vishwakarma Jewelers",
-    "Bridal Jewellery",
-    "22k Gold Necklace",
-    "Polki Diamonds",
-    "Temple Jewellery",
-    "Solitaire Diamond Ring",
-    "Kundan Jewellery",
-    "BIS Hallmarked Gold",
-  ],
-  authors: [{ name: "Vishwakarma Jewelers" }],
-  openGraph: {
-    title: "Vishwakarma Jewelers | Purveyors of Royal Heritage",
-    description: "Handcrafted 22K Gold, Solitaires & Regal Bridal Collections.",
-    type: "website",
-  },
+  title: "Vishwakarma Jewelers | High Fine Jewellery & Heritage Atelier",
+  description: "Handcrafted 22K Gold, Polki Diamonds, and Certified Solitaires.",
 };
 
 export default function RootLayout({
@@ -45,7 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${cinzel.variable} ${montserrat.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased bg-[#07080b] text-[#f8fafc] font-sans selection:bg-amber-400/20 selection:text-amber-200">
+        {children}
+      </body>
     </html>
   );
 }

@@ -49,3 +49,5 @@ target/
 data/
 *.log
 
+# Python virtualenv & scripts
+.venv/
