@@ -80,3 +80,18 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #3b4255;
 }
+
+/* AI Glow Border Spill Mask */
+.ai-glow-spill-mask {
+  mask-image: radial-gradient(
+    ellipse 100% 100% at 50% 50%,
+    transparent 50%,
+    black 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 100% 100% at 50% 50%,
+    transparent 50%,
+    black 100%
+  );
+}
+

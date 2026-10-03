@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, Eye, EyeOff } from 'lucide-react';
+import { CircularImageGallery } from '@/components/ui/carousel-circular-image-gallery';
+import { AIGradientBorder } from '@/components/ui/ai-gradient-border';
 
 interface AuthModalProps {
 	isOpen: boolean;
@@ -46,118 +48,130 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 				onClick={onClose}
 			/>
 
-			{/* Modal Container */}
-			<div className="relative z-10 w-full max-w-[960px] overflow-hidden rounded-3xl border border-neutral-800/80 bg-[#0d0d10] shadow-[0_25px_80px_rgba(0,0,0,0.95)] animate-in fade-in-50 zoom-in-95 duration-200">
-				{/* Close Button */}
+			{/* Modal Container with AI Glowing Animated Gradient Border */}
+			<div className="relative w-full max-w-[960px]">
+				{/* Dedicated Clean Close Button (Floated outside to never overlap the card/image) */}
 				<button
 					onClick={onClose}
-					className="absolute right-5 top-5 z-30 flex size-9 items-center justify-center rounded-full border border-neutral-800 bg-neutral-900/60 text-neutral-400 transition-colors hover:border-neutral-700 hover:bg-neutral-800 hover:text-white cursor-pointer"
+					className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 z-50 flex size-9 sm:size-10 items-center justify-center rounded-full border border-white/20 bg-[#12131a] text-neutral-300 shadow-[0_6px_25px_rgba(0,0,0,0.8)] transition-all hover:scale-105 hover:border-[#fae19c]/60 hover:text-white cursor-pointer"
 					aria-label="Close modal"
 				>
 					<X className="size-4" />
 				</button>
 
-				<div className="grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
-					{/* ---------------- LEFT COLUMN: FORM ---------------- */}
-					<div className="md:col-span-7 flex flex-col justify-between p-6 sm:p-10 lg:p-12">
-						<div>
-							{/* Top Logo Glyph (Offset rounded squares) */}
-							<div className="mb-6 flex flex-col gap-1 w-6 h-6">
-								<div className="flex gap-1">
-									<span className="w-2.5 h-2.5 rounded-[3px] bg-white"></span>
-								</div>
-								<div className="flex gap-1 ml-2">
-									<span className="w-2.5 h-2.5 rounded-[3px] bg-white"></span>
-								</div>
-							</div>
-
-							{/* Title */}
-							<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
-								{mode === 'signin' ? 'Welcome back!' : 'Create your account'}
-							</h2>
-
-							{/* Subtitle */}
-							<p className="mt-3 text-xs sm:text-[13px] text-neutral-400 font-normal leading-relaxed max-w-md">
-								{mode === 'signin'
-									? 'We empower developers and technical teams to create, simulate, and manage AI-driven workflows visually'
-									: 'Join us today to build, customize, and simulate next-generation workflows.'}
-							</p>
-
-							{/* Form */}
-							<form onSubmit={handleSubmit} className="mt-8 space-y-4">
-								{mode === 'signup' && (
-									<div>
-										<label className="block text-xs font-medium text-neutral-300 mb-2">
-											Full Name
-										</label>
-										<input
-											type="text"
-											required
-											value={fullName}
-											onChange={(e) => setFullName(e.target.value)}
-											placeholder="Jane Doe"
-											className="w-full rounded-xl border border-neutral-800 bg-[#1c1c1f] px-4 py-3 text-sm text-neutral-100 placeholder-neutral-500 outline-none transition-all focus:border-neutral-600 focus:ring-1 focus:ring-neutral-600"
-										/>
+				<AIGradientBorder
+					duration={3.5}
+					className="w-full rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] animate-in fade-in-50 zoom-in-95 duration-200"
+				>
+					<div className="relative w-full rounded-3xl bg-[#0c0d12] overflow-hidden">
+						<div className="grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
+							{/* ---------------- LEFT COLUMN: FORM ---------------- */}
+							<div className="md:col-span-7 flex flex-col justify-between p-6 sm:p-9 lg:p-11">
+								<div>
+									{/* Vishwakarma Jewellers Luxury Monogram Brand Header */}
+									<div className="mb-6 flex items-center justify-between">
+										<div className="flex flex-col">
+											<div className="flex items-center gap-2">
+												<span className="font-serif text-lg sm:text-xl font-bold tracking-[0.24em] uppercase text-white">
+													Vishwakarma
+												</span>
+												<span className="rounded-full border border-[#fae19c]/35 bg-[#fae19c]/10 px-2 py-0.5 text-[9px] font-semibold tracking-[0.2em] uppercase text-[#fae19c]">
+													Atelier
+												</span>
+											</div>
+											<p className="text-[10px] font-medium tracking-[0.32em] uppercase text-neutral-400 mt-1">
+												Jewellers • Estd 1984
+											</p>
+										</div>
 									</div>
-								)}
 
-								<div>
-									<label className="block text-xs font-medium text-neutral-300 mb-2">
-										Email
-									</label>
-									<input
-										type="email"
-										required
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
-										placeholder="youremail@yourdomain.com"
-										className="w-full rounded-xl border border-neutral-800 bg-[#1c1c1f] px-4 py-3 text-sm text-neutral-100 placeholder-neutral-500 outline-none transition-all focus:border-neutral-600 focus:ring-1 focus:ring-neutral-600"
-									/>
-								</div>
+									{/* Title */}
+									<h2 className="font-serif text-2xl sm:text-3xl font-semibold tracking-wide text-white">
+										{mode === 'signin' ? 'Welcome back' : 'Create an Account'}
+									</h2>
 
-								<div>
-									<div className="flex items-center justify-between mb-2">
-										<label className="block text-xs font-medium text-neutral-300">
-											Password
-										</label>
-										{mode === 'signin' && (
-											<button
-												type="button"
-												onClick={() => alert('Password reset link sent to your email.')}
-												className="text-xs text-neutral-400 hover:text-neutral-200 transition-colors cursor-pointer"
-											>
-												Forgot?
-											</button>
+									{/* Subtitle */}
+									<p className="mt-2.5 text-xs sm:text-[13px] text-neutral-400 font-light leading-relaxed max-w-md">
+										{mode === 'signin'
+											? 'Sign in to access your certified hallmark passports, bespoke atelier commissions, and private concierge.'
+											: 'Join the Vishwakarma Guild to curate your heirloom vault, request 3D CAD commissions, and book master specialists.'}
+									</p>
+
+									{/* Form */}
+									<form onSubmit={handleSubmit} className="mt-7 space-y-4">
+										{mode === 'signup' && (
+											<div>
+												<label className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-300 mb-1.5">
+													Full Name
+												</label>
+												<input
+													type="text"
+													required
+													value={fullName}
+													onChange={(e) => setFullName(e.target.value)}
+													placeholder="Your full name"
+													className="w-full rounded-xl border border-neutral-800 bg-[#16171c] px-4 py-3 text-sm text-neutral-100 placeholder-neutral-500 outline-none transition-all focus:border-[#fae19c]/60 focus:ring-1 focus:ring-[#fae19c]/20"
+												/>
+											</div>
 										)}
-									</div>
-									<div className="relative">
-										<input
-											type={showPassword ? 'text' : 'password'}
-											required
-											value={password}
-											onChange={(e) => setPassword(e.target.value)}
-											placeholder="Create a password"
-											className="w-full rounded-xl border border-neutral-800 bg-[#1c1c1f] px-4 py-3 pr-10 text-sm text-neutral-100 placeholder-neutral-500 outline-none transition-all focus:border-neutral-600 focus:ring-1 focus:ring-neutral-600"
-										/>
-										<button
-											type="button"
-											onClick={() => setShowPassword(!showPassword)}
-											className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white transition-colors cursor-pointer"
-											aria-label={showPassword ? 'Hide password' : 'Show password'}
-										>
-											{showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-										</button>
-									</div>
-								</div>
 
-								{/* Primary Action Button */}
-								<button
-									type="submit"
-									className="w-full rounded-xl bg-[#27272a] hover:bg-[#323236] border border-neutral-700/60 py-3 text-sm font-medium text-neutral-100 transition-all duration-200 shadow-sm cursor-pointer"
-								>
-									{mode === 'signin' ? 'Sign in' : 'Create account'}
-								</button>
-							</form>
+										<div>
+											<label className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-300 mb-1.5">
+												Email Address
+											</label>
+											<input
+												type="email"
+												required
+												value={email}
+												onChange={(e) => setEmail(e.target.value)}
+												placeholder="youremail@yourdomain.com"
+												className="w-full rounded-xl border border-neutral-800 bg-[#16171c] px-4 py-3 text-sm text-neutral-100 placeholder-neutral-500 outline-none transition-all focus:border-[#fae19c]/60 focus:ring-1 focus:ring-[#fae19c]/20"
+											/>
+										</div>
+
+										<div>
+											<div className="flex items-center justify-between mb-1.5">
+												<label className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-300">
+													Password
+												</label>
+												{mode === 'signin' && (
+													<button
+														type="button"
+														onClick={() => alert('Password reset link sent to your email.')}
+														className="text-xs text-[#fae19c] hover:underline transition-colors cursor-pointer"
+													>
+														Forgot?
+													</button>
+												)}
+											</div>
+											<div className="relative">
+												<input
+													type={showPassword ? 'text' : 'password'}
+													required
+													value={password}
+													onChange={(e) => setPassword(e.target.value)}
+													placeholder="Enter your password"
+													className="w-full rounded-xl border border-neutral-800 bg-[#16171c] px-4 py-3 pr-10 text-sm text-neutral-100 placeholder-neutral-500 outline-none transition-all focus:border-[#fae19c]/60 focus:ring-1 focus:ring-[#fae19c]/20"
+												/>
+												<button
+													type="button"
+													onClick={() => setShowPassword(!showPassword)}
+													className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+													aria-label={showPassword ? 'Hide password' : 'Show password'}
+												>
+													{showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+												</button>
+											</div>
+										</div>
+
+										{/* Primary Action Button */}
+										<button
+											type="submit"
+											className="mt-2 w-full rounded-xl bg-[#23242c] hover:bg-[#2d2e38] border border-white/10 hover:border-[#fae19c]/50 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white transition-all duration-200 shadow-md cursor-pointer hover:shadow-[0_4px_20px_rgba(250,225,156,0.12)]"
+										>
+											{mode === 'signin' ? 'Sign in' : 'Create Account'}
+										</button>
+									</form>
 
 							{/* "or" Divider */}
 							<div className="relative my-7 flex items-center justify-center">
@@ -257,64 +271,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 						</div>
 					</div>
 
-					{/* ---------------- RIGHT COLUMN: SHOWCASE CARD ---------------- */}
+					{/* ---------------- RIGHT COLUMN: CIRCULAR CAROUSEL IMAGE GALLERY ---------------- */}
 					<div className="hidden md:flex md:col-span-5 relative p-4">
-						<div className="relative size-full overflow-hidden rounded-2xl border border-white/[0.08] p-6 flex flex-col justify-end">
-							{/* Background Luxury Glowing Mesh Gradient matching screenshot */}
-							<div className="absolute inset-0 bg-[#0c0d12]" />
-							
-							{/* Subtle organic contour lines / backdrop geometry */}
-							<div
-								className="absolute inset-0 opacity-20 pointer-events-none"
-								style={{
-									backgroundImage: `radial-gradient(circle at 80% 90%, rgba(204,153,68,0.7) 0%, rgba(130,105,45,0.4) 40%, rgba(35,32,25,0.1) 70%, transparent 100%)`,
-								}}
-							/>
-							<div
-								className="absolute inset-0 pointer-events-none"
-								style={{
-									background: 'linear-gradient(145deg, #0b0c10 0%, #17171d 40%, #453c23 75%, #8f743c 100%)',
-									opacity: 0.85,
-								}}
-							/>
-
-							{/* Abstract curved highlights replicating the screenshot */}
-							<svg
-								className="absolute -top-10 -right-10 w-[140%] h-[140%] opacity-15 pointer-events-none"
-								viewBox="0 0 400 400"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<circle cx="200" cy="200" r="160" stroke="#ffffff" strokeWidth="1" strokeDasharray="6 6" />
-								<circle cx="260" cy="180" r="130" stroke="#ffffff" strokeWidth="1" />
-								<circle cx="300" cy="220" r="180" stroke="#ffd280" strokeWidth="2" opacity="0.3" />
-							</svg>
-
-							{/* Top Badges */}
-							<div className="relative z-10 flex items-center gap-2 mb-3">
-								<span className="rounded-md border border-neutral-700/60 bg-[#232328]/80 px-2.5 py-1 text-[11px] font-normal text-neutral-300 backdrop-blur-md">
-									Product Company
-								</span>
-								<span className="rounded-md border border-neutral-700/60 bg-[#232328]/80 px-2.5 py-1 text-[11px] font-normal text-neutral-300 backdrop-blur-md">
-									Cloud Management
-								</span>
-							</div>
-
-							{/* Testimonial Quote Card */}
-							<div className="relative z-10 rounded-xl border border-white/[0.1] bg-[#1a1715]/75 p-5 backdrop-blur-xl shadow-2xl">
-								<p className="text-[13px] text-neutral-200 font-normal leading-relaxed">
-									Aceternity Pro Components have completely changed how we work. What used to take hours every week is now fully automated.
-								</p>
-								<div className="mt-4">
-									<div className="text-xs font-semibold text-white">Gina Clinton</div>
-									<div className="text-[11px] text-neutral-400">
-										Head of Product, <span className="font-semibold text-neutral-200">Acme Inc.</span>
-									</div>
-								</div>
-							</div>
-						</div>
+						<CircularImageGallery />
 					</div>
 				</div>
+				</div>
+			</AIGradientBorder>
 			</div>
 		</div>
 	);
