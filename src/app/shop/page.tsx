@@ -6,6 +6,7 @@ import { Header } from '@/components/ui/header-3';
 import { ShopTopCategoryBar } from '@/components/shop/ShopTopCategoryBar';
 import { ShopSidebarFilters } from '@/components/shop/ShopSidebarFilters';
 import { ShopProductCard } from '@/components/shop/ShopProductCard';
+import { ShopProductDetailModal } from '@/components/shop/ShopProductDetailModal';
 import { ShopQuickConfigDrawer } from '@/components/shop/ShopQuickConfigDrawer';
 import { BespokeIdeaPortal } from '@/components/life-of-a-jewel/components/BespokeIdeaPortal';
 import { ShopItem, SHOP_ITEMS, LIVE_BULLION_RATE_22K, LIVE_BULLION_RATE_18K } from '@/components/shop/shopData';
@@ -24,11 +25,19 @@ function ShopContent() {
 	const [sortBy, setSortBy] = useState<'recommended' | 'price-asc' | 'price-desc' | 'weight-desc'>('recommended');
 
 	// Drawer & Modal States
+	const [selectedDetailItem, setSelectedDetailItem] = useState<ShopItem | null>(null);
 	const [customizingItem, setCustomizingItem] = useState<ShopItem | null>(null);
 	const [buyingItem, setBuyingItem] = useState<ShopItem | null>(null);
+	const [wishlistIds, setWishlistIds] = useState<string[]>([]);
 	const [isIdeaDropOpen, setIsIdeaDropOpen] = useState(false);
 	const [isConsultationOpen, setIsConsultationOpen] = useState(false);
 	const [successModalMessage, setSuccessModalMessage] = useState<string | null>(null);
+
+	const handleToggleWishlist = (id: string) => {
+		setWishlistIds((prev) =>
+			prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+		);
+	};
 
 	// Read initial query params from URL
 	useEffect(() => {
@@ -220,8 +229,9 @@ function ShopContent() {
 									<ShopProductCard
 										key={item.id}
 										item={item}
-										onBuy={(selected) => setBuyingItem(selected)}
-										onCustomize={(selected) => setCustomizingItem(selected)}
+										isWishlisted={wishlistIds.includes(item.id)}
+										onToggleWishlist={handleToggleWishlist}
+										onSelect={(selected) => setSelectedDetailItem(selected)}
 									/>
 								))}
 							</div>
@@ -263,6 +273,21 @@ function ShopContent() {
 			</main>
 
 			{/* ================= MODALS & DRAWERS ================= */}
+
+			{/* Editorial Heirloom Detail Modal */}
+			<ShopProductDetailModal
+				item={selectedDetailItem}
+				isOpen={!!selectedDetailItem}
+				onClose={() => setSelectedDetailItem(null)}
+				onBuy={(selected) => {
+					setSelectedDetailItem(null);
+					setBuyingItem(selected);
+				}}
+				onCustomize={(selected) => {
+					setSelectedDetailItem(null);
+					setCustomizingItem(selected);
+				}}
+			/>
 
 			{/* Interactive Make It Yours Quick-Configurator Drawer */}
 			<ShopQuickConfigDrawer
