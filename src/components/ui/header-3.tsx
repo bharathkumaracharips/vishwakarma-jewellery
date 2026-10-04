@@ -373,9 +373,9 @@ export function Header() {
 						)}
 					</div>
 
-					{/* ITEM 3: CUSTOM JEWELLERY (Link only) */}
+					{/* ITEM 3: CUSTOM JEWELLERY (Link to /custom) */}
 					<a
-						href="#custom-jewellery"
+						href="/custom"
 						className="group relative flex-shrink-0 py-2.5 text-[12px] xl:text-[12.5px] font-semibold tracking-[0.14em] uppercase whitespace-nowrap text-slate-300 hover:text-white transition-colors"
 					>
 						<span>CUSTOM JEWELLERY</span>
@@ -687,7 +687,7 @@ export function Header() {
 
 					{/* CUSTOM JEWELLERY Mobile */}
 					<a
-						href="#custom-jewellery"
+						href="/custom"
 						onClick={() => setOpen(false)}
 						className="flex items-center justify-between rounded-lg border border-white/10 p-3.5 text-[12px] font-semibold tracking-[0.14em] uppercase text-white transition-colors hover:bg-white/[0.04]"
 					>
